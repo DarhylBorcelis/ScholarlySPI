@@ -1,0 +1,63 @@
+Basic Fields
+
+| Field                                           | Description                             |
+| ----------------------------------------------- | --------------------------------------- |
+| `CharField(max_length=255)`                     | Short text (required `max_length`)      |
+| `TextField()`                                   | Long text (no max length)               |
+| `IntegerField()`                                | Whole numbers                           |
+| `FloatField()`                                  | Decimal numbers (less precise)          |
+| `DecimalField(max_digits=10, decimal_places=2)` | Decimal numbers (exact, best for money) |
+| `BooleanField()`                                | True/False                              |
+| `DateField()`                                   | Date only                               |
+| `TimeField()`                                   | Time only                               |
+| `DateTimeField()`                               | Date + Time                             |
+| `DateTimeField(default=timezone.now)`           | Auto timestamp                          |
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+Auto Timestamp Helpers
+
+| Field               | Description             |
+| ------------------- | ----------------------- |
+| `auto_now_add=True` | Set **once**, on create |
+| `auto_now=True`     | Updated **every save**  |
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+Relationship Fields
+
+| Field                                            | Description  |
+| ------------------------------------------------ | ------------ |
+| `ForeignKey(Model, on_delete=models.CASCADE)`    | One-to-many  |
+| `OneToOneField(Model, on_delete=models.CASCADE)` | One-to-one   |
+| `ManyToManyField(Model)`                         | Many-to-many |
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+File & Media Fields
+
+| Field                             | Description                 |
+| --------------------------------- | --------------------------- |
+| `FileField(upload_to='files/')`   | Upload any file             |
+| `ImageField(upload_to='images/')` | Image upload (needs Pillow) |
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+Choice Fields
+
+STATUS_CHOICES = [
+    ('pending', 'Pending'),
+    ('approved', 'Approved'),
+]
+
+status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+Summary of useful admin options
+
+| Option                 | Description            |
+| ---------------------- | ---------------------- |
+| `list_display`         | Shows columns in table |
+| `list_filter`          | Sidebar filter         |
+| `search_fields`        | Search box             |
+| `list_editable`        | Edit from list view    |
+| `list_per_page`        | Pagination             |
+| `ordering`             | Default sorting        |
+| `readonly_fields`      | Prevent editing        |
+| `fields` / `fieldsets` | Form layout            |

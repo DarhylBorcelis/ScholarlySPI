@@ -1,0 +1,25 @@
+env\Scripts\activate   
+
+pip install django
+
+django-admin startproject myproject .
+
+cd myproject
+
+dir
+
+cd ..
+
+python manage.py startapp "myapp"
+
+pyhton manage.py runserver
+
+pyhton manage.py makemigrations
+
+pyhton manage.py migrate
+
+python manage.py createsuperuser
+
+pip install pylint-django
+
+pip install django-tastypie
