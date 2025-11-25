@@ -3,7 +3,7 @@ from .models import student_data
 
 # Create your views here.
 def student_index(request):
-    return render(request, 'student_index.html')
+    return render(request, 'student_html/student_index.html')
 
 def student_signIn(request):
     if request.method == "POST":
@@ -18,7 +18,7 @@ def student_signIn(request):
         )
         return redirect('student_register_success')
 
-    return render(request, 'student_signIn.html')
+    return render(request, 'student_html/student_signIn.html')
 
 def student_logIn(request):
     message = ''
@@ -41,17 +41,17 @@ def student_logIn(request):
         except student_data.DoesNotExist:
             message = "Invalid Student ID or Email"
 
-    return render(request, 'student_logIn.html', {'message': message})
+    return render(request, 'student_html/student_logIn.html', {'message': message})
 
 def student_register_success(request):
-    return render(request, 'student_register_success.html')
+    return render(request, 'student_html/student_register_success.html')
 
 def student_dashboard(request):
     if 'student_id' not in request.session:
         return redirect('student_logIn')
 
     student_name = request.session.get('student_name')
-    return render(request, 'student_dashboard.html', {'student_name': student_name})
+    return render(request, 'student_html/student_dashboard.html', {'student_name': student_name})
 
 def student_logout(request):
     request.session.flush()    # Clear the session
