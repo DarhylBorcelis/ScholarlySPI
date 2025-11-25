@@ -8,7 +8,7 @@ class student_data(models.Model):
         ('BSIT', 'BSIT'),
     ]
 
-    student_id = models.IntegerField()
+    student_id = models.IntegerField(unique=True)
     student_fullname = models.CharField(max_length=55)
     student_contact = models.CharField(max_length=20)
     student_email = models.CharField(max_length=100)

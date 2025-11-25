@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from .models import student_data
 
 # Create your views here.
-def index(request):
-    return render(request, 'index.html')
+def student_index(request):
+    return render(request, 'student_index.html')
 
 def student_signIn(request):
     if request.method == "POST":
@@ -16,9 +16,9 @@ def student_signIn(request):
             student_grade=request.POST.get('student_grade'),
             student_course=request.POST.get('student_course'),
         )
-        return redirect('student_dashboard')
+        return redirect('student_register_success')
 
     return render(request, 'student_signIn.html')
 
-def student_dashboard(request):
-    return render(request, 'student_dashboard.html')
+def student_register_success(request):
+    return render(request, 'student_register_success.html')
