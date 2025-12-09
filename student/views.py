@@ -1,58 +1,55 @@
 from django.shortcuts import render, redirect
-from .models import student_data
+from django.contrib.auth.models import User, auth
+from django.contrib import messages
+
 
 # Create your views here.
 def student_index(request):
     return render(request, 'student_html/student_index.html')
 
-def student_signIn(request):
-    if request.method == "POST":
-        
-        student_data.objects.create(
-            student_id=request.POST.get('student_id'),
-            student_fullname=request.POST.get('student_fullname'),
-            student_contact=request.POST.get('student_contact'),
-            student_email=request.POST.get('student_email'),
-            student_grade=request.POST.get('student_grade'),
-            student_course=request.POST.get('student_course'),
-        )
-        return redirect('student_register_success')
+def student_signUp(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('pass')
+        repeat_pass = request.POST.get('repeat_pass')
 
-    return render(request, 'student_html/student_signIn.html')
+        if repeat_pass == password:
+            if User.objects.filter(username=username).exists():
+                messages.info(request, 'Username already exist')
+                return redirect('signUp')
+            elif User.objects.filter(email=email).exists():
+                messages.info(request, 'Email already exist')
+                return redirect('signUp')
+            else:
+                User.objects.create_user(username=username,email=email,password=password)
+                return redirect('logIn')
+        else:
+            messages.info(request, 'Password not the same')
+    return render(request, 'student_html/student_signUp.html')
 
 def student_logIn(request):
-    message = ''
     if request.method == 'POST':
-        student_id = request.POST.get('student_id')
-        student_email = request.POST.get('student_email')
-        student_pass = request.POST.get('student_password')
-    
-        try:
-            student = student_data.objects.get(student_id=student_id, student_email=student_email)
-            
-            if student.student_password != student_pass:
-                message = "Incorrect password"
-            else:
-                # Store student info in session
-                request.session['student_id'] = student.student_id
-                request.session['student_name'] = student.student_fullname
-                return redirect('student_dashboard')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-        except student_data.DoesNotExist:
-            message = "Invalid Student ID or Email"
+        user = auth.authenticate(username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/student')
+        else:
+            messages.info(request, 'Credential invalid!')
 
-    return render(request, 'student_html/student_logIn.html', {'message': message})
+    return render(request, 'student_html/student_logIn.html')
+
+def student_logout(request):
+    auth.logout(request)
+    return redirect('/')
 
 def student_register_success(request):
     return render(request, 'student_html/student_register_success.html')
 
-def student_dashboard(request):
-    if 'student_id' not in request.session:
-        return redirect('student_logIn')
+def dashboard(request):
+    return render(request, 'student_html/dashboard.html')
 
-    student_name = request.session.get('student_name')
-    return render(request, 'student_html/student_dashboard.html', {'student_name': student_name})
 
-def student_logout(request):
-    request.session.flush()    # Clear the session
-    return redirect('student_logIn')

@@ -1,0 +1,51 @@
+{% extends "student_html/main.html" %}
+
+
+{% block content %}
+
+<p>Scholarship Dashboard</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Student ID</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Course</th>
+            <th scope="col">Year Level</th>
+            <th scope="col">Email</th>
+            <th scope="col">Scholarship Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>2025-001</td>
+            <td>Mark Santos</td>
+            <td>BSCS</td>
+            <td>3rd Year</td>
+            <td>mark@example.com</td>
+            <td>Approved</td>
+        </tr>
+
+        <tr>
+            <td>2025-002</td>
+            <td>Anna Dela Cruz</td>
+            <td>BSA</td>
+            <td>2nd Year</td>
+            <td>anna@example.com</td>
+            <td>Pending</td>
+        </tr>
+
+        <tr>
+            <td>2025-003</td>
+            <td>John Perez</td>
+            <td>BSIT</td>
+            <td>1st Year</td>
+            <td>john@example.com</td>
+            <td>Rejected</td>
+        </tr>
+    </tbody>
+</table>
+
+
+{% endblock  %}
