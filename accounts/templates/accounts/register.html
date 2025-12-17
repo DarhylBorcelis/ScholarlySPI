@@ -1,0 +1,18 @@
+<h2>Student Registration</h2>
+
+{% if error %}
+<p style="color:red;">{{ error }}</p>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    <input name="student_id" placeholder="Student ID" required>
+    <input name="username" placeholder="Username" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="course" placeholder="Course" required>
+    <input name="year_level" type="number" placeholder="Year Level" required>
+    <input name="password" type="password" placeholder="Password" required>
+    <button type="submit">Sign Up</button>
+</form>
+
+<p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>

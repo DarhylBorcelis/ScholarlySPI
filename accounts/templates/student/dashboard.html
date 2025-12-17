@@ -1,0 +1,28 @@
+<h2>Welcome, {{ request.user.username }}</h2>
+<a href="{% url 'logout' %}">Log Out</a>
+
+{% if profile %}
+    <p>Student ID: {{ profile.student_id }}</p>
+    <p>Course: {{ profile.course }}</p>
+    <p>Year Level: {{ profile.year_level }}</p>
+    <p>GPA: {{ profile.gpa }}</p>
+{% endif %}
+
+<h3>Your Scholarship Applications</h3>
+
+{% if applications %}
+    <ul>
+    {% for app in applications %}
+        <li>
+            GPA: {{ app.gpa }} |
+            Status: {{ app.status }} |
+            Submitted At: {{ app.submitted_at }} |
+            Document: <a href="{{ app.document.url }}" target="_blank">View</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You have not submitted any applications yet.</p>
+{% endif %}
+
+<a href="{% url 'apply_scholarship' %}">Submit New Application</a>

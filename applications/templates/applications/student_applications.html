@@ -1,0 +1,18 @@
+<h2>My Applications</h2>
+<a href="{% url 'logout' %}">Log Out</a>
+<table border="1">
+    <tr>
+        <th>GPA</th>
+        <th>Status</th>
+        <th>Submitted At</th>
+    </tr>
+    {% for app in applications %}
+    <tr>
+        <td>{{ app.gpa }}</td>
+        <td>{{ app.status }}</td>
+        <td>{{ app.submitted_at }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No applications yet.</td></tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,25 @@
+<h2>Review Applications</h2>
+<a href="{% url 'logout' %}">Log Out</a>
+<table border="1">
+    <tr>
+        <th>Student</th>
+        <th>GPA</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    {% for app in applications %}
+    <tr>
+        <td>{{ app.student.username }}</td>
+        <td>{{ app.gpa }}</td>
+        <td>{{ app.status }}</td>
+        <td>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="app_id" value="{{ app.id }}">
+                <button name="action" value="Approved">Approve</button>
+                <button name="action" value="Rejected">Reject</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
