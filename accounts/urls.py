@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from django.conf.urls.static import static
 
 urlpatterns = [
 
@@ -16,4 +15,12 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
+
+    # crude
+    path('update/<int:app_id>/', views.update_application_status, name='update_application'),
+    path('delete/<int:app_id>/', views.delete_application, name='delete_application'),
+    path('update_renewal/<int:renewal_id>/', views.update_renewal_status, name='update_renewal'),
+    path('delete_renewal/<int:renewal_id>/', views.delete_renewal, name='delete_renewal'),
+
+
 ]

@@ -1,0 +1,92 @@
+<h2>Admin Dashboard</h2>
+
+<h3>Scholarship Applications</h3>
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Student</th>
+        <th>GPA</th>
+        <th>Status</th>
+        <th>Document</th>
+        <th>Submitted</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for app in applications %}
+    <tr>
+        <td>{{ app.student.username }}</td>
+        <td>{{ app.gpa }}</td>
+        <td>{{ app.status }}</td>
+        <td>
+            <a href="{{ app.document.url }}" target="_blank">View</a>
+        </td>
+        <td>{{ app.submitted_at }}</td>
+        <td>
+            <!-- UPDATE -->
+            <form method="POST" action="{% url 'update_application' app.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button name="status" value="Approved">Approve</button>
+                <button name="status" value="Rejected">Reject</button>
+            </form>
+
+            <!-- DELETE -->
+            <form method="POST" action="{% url 'delete_application' app.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button onclick="return confirm('Delete this application?')">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6">No applications yet</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+<h3>Scholarship Renewals</h3>
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Student</th>
+        <th>Scholarship</th>
+        <th>Semester</th>
+        <th>GPA</th>
+        <th>Status</th>
+        <th>Document</th>
+        <th>Submitted</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for r in renewals %}
+    <tr>
+        <td>{{ r.student.username }}</td>
+        <td>{{ r.scholarship.student.username }}'s Application</td>
+        <td>{{ r.semester }}</td>
+        <td>{{ r.gpa }}</td>
+        <td>{{ r.status }}</td>
+        <td>
+            <a href="{{ r.document.url }}" target="_blank">View</a>
+        </td>
+        <td>{{ r.submitted_at }}</td>
+        <td>
+            <form method="POST" action="{% url 'update_renewal' r.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button name="status" value="Approved">Approve</button>
+                <button name="status" value="Rejected">Reject</button>
+            </form>
+
+            <form method="POST" action="{% url 'delete_renewal' r.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button onclick="return confirm('Delete this renewal?')">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="8">No renewals yet</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<a href="{% url 'logout' %}">Logout</a>

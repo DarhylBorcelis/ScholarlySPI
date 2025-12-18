@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
 
 from django.contrib.auth.models import User
-from applications.models import ScholarshipApplication
+from applications.models import Renewal, ScholarshipApplication
 from .models import StudentProfile
 
 
@@ -29,15 +29,22 @@ def is_admin(user):
 # =========================
 # DASHBOARDS
 # =========================
+
 @user_passes_test(is_student)
 def student_dashboard(request):
-    applications = ScholarshipApplication.objects.filter(student=request.user)
     profile = getattr(request.user, 'studentprofile', None)
+    applications = ScholarshipApplication.objects.filter(student=request.user)
+    renewals = Renewal.objects.filter(student=request.user)
+    
+    has_approved = applications.filter(status='Approved').exists()
 
     return render(request, 'student/dashboard.html', {
+        'profile': profile,
         'applications': applications,
-        'profile': profile
+        'renewals': renewals,
+        'has_approved': has_approved
     })
+
 
 @user_passes_test(is_teacher)
 def teacher_dashboard(request):
@@ -52,9 +59,15 @@ def teacher_dashboard(request):
 
     return render(request, 'teacher/dashboard.html', {'applications': applications})
 
-@user_passes_test(is_admin)
 def admin_dashboard(request):
-    return render(request, 'admin/dashboard.html')
+    applications = ScholarshipApplication.objects.all().order_by('-submitted_at')
+    renewals = Renewal.objects.all().order_by('-submitted_at')
+
+    return render(request, 'admin/dashboard.html', {
+        'applications': applications,
+        'renewals': renewals
+    })
+
 
 
 # =========================
@@ -124,11 +137,45 @@ def user_logout(request):
     logout(request)
     return redirect('login')
 
+# =========================
+# CRUD OPERATIONS FOR APPLICATIONS
+# =========================
 
+@user_passes_test(is_admin)
+def update_application_status(request, app_id):
+    application = get_object_or_404(ScholarshipApplication, id=app_id)
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        application.status = status
+        application.save()
 
+    return redirect('admin_dashboard')
 
+@user_passes_test(is_admin)
+def delete_application(request, app_id):
+    application = get_object_or_404(ScholarshipApplication, id=app_id)
+    application.delete()
+    return redirect('admin_dashboard')
 
+# =========================
+# CRUD OPERATIONS FOR RENEWALS
+# =========================
 
+@user_passes_test(is_admin)
+def update_renewal_status(request, renewal_id):
+    renew = get_object_or_404(Renewal, id=renewal_id)
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        renew.status = status
+        renew.save()
+
+    return redirect('admin_dashboard')
+
+@user_passes_test(is_admin)
+def delete_renewal(request, renewal_id):
+    renew = get_object_or_404(Renewal, id=renewal_id)
+    renew.delete()
+    return redirect('admin_dashboard')
 
 
 

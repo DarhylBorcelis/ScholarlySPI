@@ -21,8 +21,33 @@
         </li>
     {% endfor %}
     </ul>
+
+    {% if has_approved %}
+    <a href="{% url 'apply_renewal' %}">Apply for Renewal</a>
+    {% endif %}
+
+
 {% else %}
     <p>You have not submitted any applications yet.</p>
+    <a href="{% url 'apply_scholarship' %}">Apply for Scholarship</a>
 {% endif %}
 
-<a href="{% url 'apply_scholarship' %}">Submit New Application</a>
+<hr>
+
+<h3>Your Scholarship Renewals</h3>
+
+{% if renewals %}
+    <ul>
+    {% for r in renewals %}
+        <li>
+            Semester: {{ r.semester }} |
+            GPA: {{ r.gpa }} |
+            Status: {{ r.status }} |
+            Submitted At: {{ r.submitted_at }} |
+            Document: <a href="{{ r.document.url }}" target="_blank">View</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You have not submitted any renewals yet.</p>
+{% endif %}

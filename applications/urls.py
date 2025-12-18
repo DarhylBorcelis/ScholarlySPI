@@ -3,6 +3,9 @@ from . import views
 
 urlpatterns = [
     path('apply/', views.apply_scholarship, name='apply_scholarship'),
-    path('my-applications/', views.student_applications, name='student_applications'),
     path('review/', views.review_applications, name='review_applications'),
+
+    # renewal
+    path('renewal/apply/', views.apply_renewal, name='apply_renewal'),
+
 ]
