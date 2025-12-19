@@ -1,0 +1,31 @@
+<h2>Update Profile</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <label>Username</label><br>
+    <input type="text" name="username" value="{{ user.username }}"><br><br>
+    
+    <label>Email</label><br>
+    <input type="email" name="email" value="{{ user.email }}"><br><br>
+    
+    <label>New Password</label><br>
+    <input type="password" name="password" placeholder="Leave blank to keep current"><br><br>
+    
+    <!-- StudentProfile fields -->
+    <label>Student ID</label><br>
+    <input type="text" name="student_id" value="{{ profile.student_id }}"><br><br>
+
+    <label>Course</label><br>
+    <input type="text" name="course" value="{{ profile.course }}"><br><br>
+
+    <label>Year Level</label><br>
+    <input type="number" name="year_level" value="{{ profile.year_level }}"><br><br>
+
+    <button type="submit">Update Profile</button>
+</form>
+
+
+
+<a href="{% url 'student_dashboard' %}">Back to Dashboard</a>
+<a href="{% url 'student_settings' %}">Back to Settings</a>

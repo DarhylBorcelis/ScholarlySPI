@@ -1,51 +1,39 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
 
 from django.contrib.auth.models import User
-from applications.models import Renewal, ScholarshipApplication
-from .models import StudentProfile
+from .models import StudentProfile, ScholarshipApplication, Renewal
 
 
-# =========================
 # HOME PAGE
-# =========================
 def index(request):
     return render(request, 'index.html')
 
-
-# =========================
 # GROUP CHECK FUNCTIONS
-# =========================
 def is_student(user):
     return user.groups.filter(name='Student').exists()
 def is_teacher(user):
     return user.groups.filter(name='Teacher').exists()
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
+def is_teacher_or_admin(user):
+    return is_teacher(user) or is_admin(user)
 
-
-# =========================
 # DASHBOARDS
-# =========================
-
 @user_passes_test(is_student)
 def student_dashboard(request):
-    profile = getattr(request.user, 'studentprofile', None)
     applications = ScholarshipApplication.objects.filter(student=request.user)
     renewals = Renewal.objects.filter(student=request.user)
     
     has_approved = applications.filter(status='Approved').exists()
 
     return render(request, 'student/dashboard.html', {
-        'profile': profile,
         'applications': applications,
         'renewals': renewals,
         'has_approved': has_approved
     })
-
-
 @user_passes_test(is_teacher)
 def teacher_dashboard(request):
     applications = ScholarshipApplication.objects.all()
@@ -58,7 +46,7 @@ def teacher_dashboard(request):
         application.save()
 
     return render(request, 'teacher/dashboard.html', {'applications': applications})
-
+@user_passes_test(is_admin)
 def admin_dashboard(request):
     applications = ScholarshipApplication.objects.all().order_by('-submitted_at')
     renewals = Renewal.objects.all().order_by('-submitted_at')
@@ -68,12 +56,14 @@ def admin_dashboard(request):
         'renewals': renewals
     })
 
+# SETTINGS FOR STUDENTS PROFILE
+@user_passes_test(is_student)
+def student_settings(request):
+    profile = getattr(request.user, 'studentprofile', None)
+    user = request.user
+    return render(request, 'student/settings.html', {'profile': profile, 'user': user})
 
-
-# =========================
 # FORMS
-# =========================
-
 def register(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -107,7 +97,6 @@ def register(request):
         return redirect('login')
 
     return render(request, 'accounts/register.html')
-
 def user_login(request):
 
     if request.method == "POST":
@@ -132,16 +121,76 @@ def user_login(request):
             })
 
     return render(request, 'accounts/login.html')
-
 def user_logout(request):
     logout(request)
     return redirect('login')
 
-# =========================
-# CRUD OPERATIONS FOR APPLICATIONS
-# =========================
+# STUDENT: APPLY FOR SCHOLARSHIP AND RENEWAL
+@user_passes_test(is_student)
+def apply_scholarship(request):
+    if request.method == 'POST':
+        gpa = request.POST.get('gpa')
+        document = request.FILES.get('document')
 
-@user_passes_test(is_admin)
+        scholarship = ScholarshipApplication.objects.filter(
+            student=request.user,
+            status='Approved'
+        ).first()
+
+        if scholarship:
+            return redirect('student_dashboard')
+        else:
+            ScholarshipApplication.objects.create(
+                student=request.user,
+                gpa=gpa,
+                document=document
+            )
+            return redirect('student_dashboard')
+
+    return render(request, 'accounts/apply.html')
+@user_passes_test(is_student)
+def apply_renewal(request):
+    scholarship = ScholarshipApplication.objects.filter(
+        student=request.user,
+        status='Approved'
+    ).first()
+
+    latest_renewal = Renewal.objects.filter(
+        student=request.user,
+        scholarship=scholarship
+    ).order_by('-submitted_at').first()
+
+
+    if not scholarship:
+        return redirect('student_dashboard')
+
+    if latest_renewal and latest_renewal.status != 'Approved' and latest_renewal.status != 'Rejected':
+        return redirect('student_dashboard')
+
+    if request.method == 'POST':
+        semester = request.POST.get('semester')
+        gpa = request.POST.get('gpa')
+        document = request.FILES.get('document')
+    
+        if Renewal.objects.filter( student=request.user, scholarship=scholarship, semester=semester).exists():
+            return redirect('student_dashboard')
+
+        Renewal.objects.create(
+            student=request.user,
+            scholarship=scholarship,
+            semester=semester,
+            gpa=gpa,
+            document=document
+        )
+
+        return redirect('student_dashboard')
+
+    return render(request, 'accounts/apply_renewal.html', {
+        'scholarship': scholarship
+    })
+
+# CRUD FOR TEACHER AND ADMIN APPLICATIONS
+@user_passes_test(is_teacher_or_admin)
 def update_application_status(request, app_id):
     application = get_object_or_404(ScholarshipApplication, id=app_id)
     if request.method == 'POST':
@@ -149,38 +198,75 @@ def update_application_status(request, app_id):
         application.status = status
         application.save()
 
-    return redirect('admin_dashboard')
+    if is_teacher(request.user):
+        return redirect('teacher_dashboard')
 
-@user_passes_test(is_admin)
+    return redirect('admin_dashboard')
+@user_passes_test(is_admin) # admin only
 def delete_application(request, app_id):
     application = get_object_or_404(ScholarshipApplication, id=app_id)
     application.delete()
     return redirect('admin_dashboard')
 
-# =========================
-# CRUD OPERATIONS FOR RENEWALS
-# =========================
-
-@user_passes_test(is_admin)
+# CRUD FOR TEACHER AND ADMIN RENEWALS
+@user_passes_test(is_teacher_or_admin) 
 def update_renewal_status(request, renewal_id):
     renew = get_object_or_404(Renewal, id=renewal_id)
     if request.method == 'POST':
         status = request.POST.get('status')
         renew.status = status
         renew.save()
+    if is_teacher(request.user):
+        return redirect('teacher_dashboard')
 
     return redirect('admin_dashboard')
-
-@user_passes_test(is_admin)
+@user_passes_test(is_admin) # admin only
 def delete_renewal(request, renewal_id):
     renew = get_object_or_404(Renewal, id=renewal_id)
     renew.delete()
     return redirect('admin_dashboard')
 
+# CRUD FOR STUDENT PROFILES
+@user_passes_test(is_student)
+def update_profile(request):
+    profile = get_object_or_404(StudentProfile, user=request.user)
+    user = request.user
 
+    if request.method == 'POST':
+        # Update profile fields
+        profile.student_id = request.POST.get('student_id')
+        profile.course = request.POST.get('course')
+        profile.year_level = request.POST.get('year_level')
+        profile.save()
 
+        # Update User fields
+        new_username = request.POST.get('username')
+        new_email = request.POST.get('email')
+        new_password = request.POST.get('password')
 
+        if new_username:
+            user.username = new_username
+        if new_email:
+            user.email = new_email
+        if new_password:
+            user.set_password(new_password)
+            update_session_auth_hash(request, user)
 
+        user.save()
+
+        return redirect('student_dashboard')
+
+    return render(request, 'student/update_profile.html', {
+        'profile': profile,
+        'user': user
+    })
+
+@user_passes_test(is_student)
+def delete_profile(request):
+    user = request.user
+    logout(request)
+    user.delete()
+    return redirect('register')
 
 
 

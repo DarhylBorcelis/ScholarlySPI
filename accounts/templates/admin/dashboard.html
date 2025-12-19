@@ -21,14 +21,12 @@
         </td>
         <td>{{ app.submitted_at }}</td>
         <td>
-            <!-- UPDATE -->
             <form method="POST" action="{% url 'update_application' app.id %}" style="display:inline;">
                 {% csrf_token %}
                 <button name="status" value="Approved">Approve</button>
                 <button name="status" value="Rejected">Reject</button>
             </form>
 
-            <!-- DELETE -->
             <form method="POST" action="{% url 'delete_application' app.id %}" style="display:inline;">
                 {% csrf_token %}
                 <button onclick="return confirm('Delete this application?')">Delete</button>
@@ -57,19 +55,19 @@
         <th>Actions</th>
     </tr>
 
-    {% for r in renewals %}
+    {% for renewal in renewals %}
     <tr>
-        <td>{{ r.student.username }}</td>
-        <td>{{ r.scholarship.student.username }}'s Application</td>
-        <td>{{ r.semester }}</td>
-        <td>{{ r.gpa }}</td>
-        <td>{{ r.status }}</td>
+        <td>{{ renewal.student.username }}</td>
+        <td>{{ renewal.scholarship.student.username }}'s Application</td>
+        <td>{{ renewal.semester }}</td>
+        <td>{{ renewal.gpa }}</td>
+        <td>{{ renewal.status }}</td>
         <td>
-            <a href="{{ r.document.url }}" target="_blank">View</a>
+            <a href="{{ renewal.document.url }}" target="_blank">View</a>
         </td>
-        <td>{{ r.submitted_at }}</td>
+        <td>{{ renewal.submitted_at }}</td>
         <td>
-            <form method="POST" action="{% url 'update_renewal' r.id %}" style="display:inline;">
+            <form method="POST" action="{% url 'update_renewal' renewal.id %}" style="display:inline;">
                 {% csrf_token %}
                 <button name="status" value="Approved">Approve</button>
                 <button name="status" value="Rejected">Reject</button>

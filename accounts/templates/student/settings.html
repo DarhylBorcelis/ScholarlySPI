@@ -1,0 +1,15 @@
+<h2>Settings</h2>
+
+
+{% if profile %}
+    <p>Student ID: {{ profile.student_id }}</p>
+    <p>Name: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Course: {{ profile.course }}</p>
+    <p>Year Level: {{ profile.year_level }}</p>
+
+    <a href="{% url 'update_profile' %}">Update Profile</a>
+    <a href="{% url 'delete_profile' %}">Delete Account</a>
+
+    <a href="{% url 'logout' %}">Log Out</a>
+{% endif %}
