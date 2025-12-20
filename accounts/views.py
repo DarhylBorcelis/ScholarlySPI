@@ -9,7 +9,8 @@ from .models import StudentProfile, ScholarshipApplication, Renewal
 
 # HOME PAGE
 def index(request):
-    return render(request, 'index.html')
+    user = request.user.is_authenticated
+    return render(request, 'index.html', {'user': user})
 
 # GROUP CHECK FUNCTIONS
 def is_student(user):
