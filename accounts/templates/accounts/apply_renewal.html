@@ -9,16 +9,34 @@
     {% csrf_token %}
 
     <label>Semester</label><br>
-    <input type="text" name="semester" placeholder="e.g. 2nd Semester AY 2025-2026" required>
+        <select name="semester" required>
+            <option value="">-- Select Semester --</option>
+            <option value="1st Semester">1st Semester</option>
+            <option value="2nd Semester">2nd Semester</option>
+            <option value="3rd Semester">3rd Semester</option>
+            <option value="4th Semester">4th Semester</option>
+        </select>
     <br><br>
 
     <label>Current GPA</label><br>
     <input type="number" name="gpa" step="0.01" min="1.00" max="5.00" required>
     <br><br>
 
-    <label>Upload Renewal Document</label><br>
-    <input type="file" name="document" required>
-    <br><br>
+    <!-- Documents -->
+    <label>Birth Certificate</label><br>
+    <input type="file" name="birth_certificate" required><br><br>
+    
+    <label>Report Card</label><br>
+    <input type="file" name="report_card" required><br><br>
+    
+    <label>Certificate of Enrollment</label><br>
+    <input type="file" name="enrollment_cert" required><br><br>
+    
+    <label>Good Moral Certificate</label><br>
+    <input type="file" name="good_moral" required><br><br>
+    
+    <label>ID Photo</label><br>
+    <input type="file" name="id_photo" required><br><br>
 
     <button type="submit">Submit Renewal</button>
 </form>

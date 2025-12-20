@@ -1,7 +1,37 @@
 <h2>Apply for Scholarship</h2>
+
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <input name="gpa" type="number" step="0.01" placeholder="GPA" required>
-    <input name="document" type="file" required>
+    
+    <!-- GPA -->
+    <label>GPA</label><br>
+    <input type="number" name="gpa" step="0.01" placeholder="Enter your GPA" required><br><br>
+
+    <label>Semester</label><br>
+        <select name="semester" required>
+            <option value="">-- Select Semester --</option>
+            <option value="1st Semester">1st Semester</option>
+            <option value="2nd Semester">2nd Semester</option>
+            <option value="3rd Semester">3rd Semester</option>
+            <option value="4th Semester">4th Semester</option>
+        </select>
+    <br><br>
+    
+    <!-- Documents -->
+    <label>Birth Certificate</label><br>
+    <input type="file" name="birth_certificate" required><br><br>
+    
+    <label>Report Card</label><br>
+    <input type="file" name="report_card" required><br><br>
+    
+    <label>Certificate of Enrollment</label><br>
+    <input type="file" name="enrollment_cert" required><br><br>
+    
+    <label>Good Moral Certificate</label><br>
+    <input type="file" name="good_moral" required><br><br>
+    
+    <label>ID Photo</label><br>
+    <input type="file" name="id_photo" required><br><br>
+    
     <button type="submit">Submit Application</button>
 </form>

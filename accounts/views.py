@@ -36,18 +36,41 @@ def student_dashboard(request):
     })
 @user_passes_test(is_teacher)
 def teacher_dashboard(request):
-    applications = ScholarshipApplication.objects.all()
-
     if request.method == 'POST':
-        app_id = request.POST.get('app_id')
         action = request.POST.get('action')
-        application = ScholarshipApplication.objects.get(id=app_id)
-        application.status = action
-        application.save()
+        if 'app_id' in request.POST:
+            app = get_object_or_404(ScholarshipApplication, id=request.POST['app_id'])
+            app.status = action
+            app.save()
 
-    return render(request, 'teacher/dashboard.html', {'applications': applications})
+        elif 'renewal_id' in request.POST:
+            renew = get_object_or_404(Renewal, id=request.POST['renewal_id'])
+            renew.status = action
+            renew.save()
+        return redirect('teacher_dashboard')
+
+    applications = ScholarshipApplication.objects.all().order_by('-submitted_at')
+    renewals = Renewal.objects.all().order_by('-submitted_at')
+
+    return render(request, 'teacher/dashboard.html', {
+        'applications': applications,
+        'renewals': renewals
+    })
 @user_passes_test(is_admin)
 def admin_dashboard(request):
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if 'app_id' in request.POST:
+            app = get_object_or_404(ScholarshipApplication, id=request.POST['app_id'])
+            app.status = action
+            app.save()
+
+        elif 'renewal_id' in request.POST:
+            renew = get_object_or_404(Renewal, id=request.POST['renewal_id'])
+            renew.status = action
+            renew.save()
+        return redirect('admin_dashboard')
+
     applications = ScholarshipApplication.objects.all().order_by('-submitted_at')
     renewals = Renewal.objects.all().order_by('-submitted_at')
 
@@ -129,23 +152,34 @@ def user_logout(request):
 @user_passes_test(is_student)
 def apply_scholarship(request):
     if request.method == 'POST':
-        gpa = request.POST.get('gpa')
-        document = request.FILES.get('document')
-
-        scholarship = ScholarshipApplication.objects.filter(
+        existing = ScholarshipApplication.objects.filter(
             student=request.user,
             status='Approved'
         ).first()
+        if existing:
+            return redirect('student_dashboard')
 
-        if scholarship:
-            return redirect('student_dashboard')
-        else:
-            ScholarshipApplication.objects.create(
-                student=request.user,
-                gpa=gpa,
-                document=document
-            )
-            return redirect('student_dashboard')
+        gpa = request.POST.get('gpa')
+        semester = request.POST.get('semester')
+
+        birth_certificate = request.FILES.get('birth_certificate')
+        report_card = request.FILES.get('report_card')
+        enrollment_cert = request.FILES.get('enrollment_cert')
+        good_moral = request.FILES.get('good_moral')
+        id_photo = request.FILES.get('id_photo')
+
+        ScholarshipApplication.objects.create(
+            student=request.user,
+            gpa=gpa,
+            semester=semester,
+            birth_certificate=birth_certificate,
+            report_card=report_card,
+            enrollment_cert=enrollment_cert,
+            good_moral=good_moral,
+            id_photo=id_photo
+        )
+
+        return redirect('student_dashboard')
 
     return render(request, 'accounts/apply.html')
 @user_passes_test(is_student)
@@ -170,7 +204,12 @@ def apply_renewal(request):
     if request.method == 'POST':
         semester = request.POST.get('semester')
         gpa = request.POST.get('gpa')
-        document = request.FILES.get('document')
+
+        birth_certificate = request.FILES.get('birth_certificate')
+        report_card = request.FILES.get('report_card')
+        enrollment_cert = request.FILES.get('enrollment_cert')
+        good_moral = request.FILES.get('good_moral')
+        id_photo = request.FILES.get('id_photo')
     
         if Renewal.objects.filter( student=request.user, scholarship=scholarship, semester=semester).exists():
             return redirect('student_dashboard')
@@ -180,7 +219,11 @@ def apply_renewal(request):
             scholarship=scholarship,
             semester=semester,
             gpa=gpa,
-            document=document
+            birth_certificate=birth_certificate,
+            report_card=report_card,
+            enrollment_cert=enrollment_cert,
+            good_moral=good_moral,
+            id_photo=id_photo
         )
 
         return redirect('student_dashboard')
@@ -189,37 +232,14 @@ def apply_renewal(request):
         'scholarship': scholarship
     })
 
-# CRUD FOR TEACHER AND ADMIN APPLICATIONS
-@user_passes_test(is_teacher_or_admin)
-def update_application_status(request, app_id):
-    application = get_object_or_404(ScholarshipApplication, id=app_id)
-    if request.method == 'POST':
-        status = request.POST.get('status')
-        application.status = status
-        application.save()
-
-    if is_teacher(request.user):
-        return redirect('teacher_dashboard')
-
-    return redirect('admin_dashboard')
+# CRUD FOR ADMIN APPLICATIONS
 @user_passes_test(is_admin) # admin only
 def delete_application(request, app_id):
     application = get_object_or_404(ScholarshipApplication, id=app_id)
     application.delete()
     return redirect('admin_dashboard')
 
-# CRUD FOR TEACHER AND ADMIN RENEWALS
-@user_passes_test(is_teacher_or_admin) 
-def update_renewal_status(request, renewal_id):
-    renew = get_object_or_404(Renewal, id=renewal_id)
-    if request.method == 'POST':
-        status = request.POST.get('status')
-        renew.status = status
-        renew.save()
-    if is_teacher(request.user):
-        return redirect('teacher_dashboard')
-
-    return redirect('admin_dashboard')
+# CRUD FOR ADMIN RENEWALS
 @user_passes_test(is_admin) # admin only
 def delete_renewal(request, renewal_id):
     renew = get_object_or_404(Renewal, id=renewal_id)
@@ -260,7 +280,6 @@ def update_profile(request):
         'profile': profile,
         'user': user
     })
-
 @user_passes_test(is_student)
 def delete_profile(request):
     user = request.user
@@ -269,6 +288,10 @@ def delete_profile(request):
     return redirect('register')
 
 
+
+#
+#
+#
 
 
 

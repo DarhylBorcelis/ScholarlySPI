@@ -7,6 +7,7 @@
     <ul>
     {% for app in applications %}
         <li>
+            Semester: {{ app.semester }} |
             GPA: {{ app.gpa }} |
             Status: {{ app.status }} |
             Submitted At: {{ app.submitted_at }} |

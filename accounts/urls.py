@@ -21,10 +21,8 @@ urlpatterns = [
     path('apply/', views.apply_scholarship, name='apply_scholarship'),
     path('renewal/apply/', views.apply_renewal, name='apply_renewal'),
 
-    # Crude for Admin and Teacher
-    path('update/<int:app_id>/', views.update_application_status, name='update_application'),
+    # Crude for Admin
     path('delete/<int:app_id>/', views.delete_application, name='delete_application'), # Admin only
-    path('update_renewal/<int:renewal_id>/', views.update_renewal_status, name='update_renewal'),
     path('delete_renewal/<int:renewal_id>/', views.delete_renewal, name='delete_renewal'), # Admin only
 
     # Crude for Student Profiles

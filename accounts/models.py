@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# Student Profile Model
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     student_id = models.CharField(max_length=20, unique=True)
@@ -12,25 +13,62 @@ class StudentProfile(models.Model):
         return self.student_id
     
 
-
-
-
-
+# Scholarship Application and Renewal Models
 STATUS_CHOICES = (
     ('Pending', 'Pending'),
     ('Approved', 'Approved'),
     ('Rejected', 'Rejected'),
 )
 
+SEMESTER_CHOICES = (
+    ('1', '1st Semester'),
+    ('2', '2nd Semester'),
+    ('3', '3rd Semester'), 
+    ('4', '4th Semester'),
+)
+
+def scholarship_upload_path(instance, filename, doc_type='other'):
+    return f"scholarship_docs/{instance.student.username}/{doc_type}/{filename}"
+def birth_certificate_upload(instance, filename):
+    return scholarship_upload_path(instance, filename, 'birth_certificate')
+def report_card_upload(instance, filename):
+    return scholarship_upload_path(instance, filename, 'report_card')
+def enrollment_cert_upload(instance, filename):
+    return scholarship_upload_path(instance, filename, 'enrollment_cert')
+def good_moral_upload(instance, filename):
+    return scholarship_upload_path(instance, filename, 'good_moral')
+def id_photo_upload(instance, filename):
+    return scholarship_upload_path(instance, filename, 'id_photo')
+
 class ScholarshipApplication(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
+    semester = models.CharField(max_length=20, choices=SEMESTER_CHOICES, default='1')
     gpa = models.DecimalField(max_digits=4, decimal_places=2)
-    document = models.FileField(upload_to='scholarship_docs/')
+    
+    birth_certificate = models.FileField(upload_to=birth_certificate_upload, null=True, blank=True)
+    report_card = models.FileField(upload_to=report_card_upload, null=True, blank=True)
+    enrollment_cert = models.FileField(upload_to=enrollment_cert_upload, null=True, blank=True)
+    good_moral = models.FileField(upload_to=good_moral_upload, null=True, blank=True)
+    id_photo = models.FileField(upload_to=id_photo_upload, null=True, blank=True)
+    
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     submitted_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f"{self.student.username} - {self.status}"
+    
+def renew_scholarship_upload_path(instance, filename, doc_type='other'):
+    return f"renewal_docs/{instance.student.username}/{doc_type}/{filename}"
+def renew_birth_certificate_upload(instance, filename):
+    return renew_scholarship_upload_path(instance, filename, 'birth_certificate')
+def renew_report_card_upload(instance, filename):
+    return renew_scholarship_upload_path(instance, filename, 'report_card')
+def renew_enrollment_cert_upload(instance, filename):
+    return renew_scholarship_upload_path(instance, filename, 'enrollment_cert')
+def renew_good_moral_upload(instance, filename):
+    return renew_scholarship_upload_path(instance, filename, 'good_moral')
+def renew_id_photo_upload(instance, filename):
+    return renew_scholarship_upload_path(instance, filename, 'id_photo')
 
 class Renewal(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -39,9 +77,15 @@ class Renewal(models.Model):
         on_delete=models.CASCADE,
         related_name='renewals'
     )
-    semester = models.CharField(max_length=50)
+    semester = models.CharField(max_length=20, choices=SEMESTER_CHOICES, default='1')
     gpa = models.DecimalField(max_digits=4, decimal_places=2)
-    document = models.FileField(upload_to='renewal_docs/')
+
+    birth_certificate = models.FileField(upload_to=renew_birth_certificate_upload, null=True, blank=True)
+    report_card = models.FileField(upload_to=renew_report_card_upload, null=True, blank =True)
+    enrollment_cert = models.FileField(upload_to=renew_enrollment_cert_upload, null=True, blank=True)
+    good_moral = models.FileField(upload_to=renew_good_moral_upload, null=True, blank=True)
+    id_photo = models.FileField(upload_to=renew_id_photo_upload, null=True, blank=True)
+
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -54,3 +98,28 @@ class Renewal(models.Model):
 
     def __str__(self):
         return f"{self.student.username} - {self.semester} ({self.status})"
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

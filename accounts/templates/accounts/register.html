@@ -6,11 +6,10 @@
 
 <form method="POST">
     {% csrf_token %}
-    <input name="student_id" placeholder="Student ID" required>
-    <input name="username" placeholder="Username" required>
-    <input name="email" type="email" placeholder="Email" required>
-    <input name="course" placeholder="Course" required>
-    <input name="year_level" type="number" placeholder="Year Level" required>
+    <input name="username" placeholder="Username" required> <br>
+    <input name="email" type="email" placeholder="Email" required> <br>
+    <input name="course" placeholder="Course" required> <br>
+    <input name="year_level" type="number" placeholder="Year Level" required> <br>
     <input name="password" type="password" placeholder="Password" required>
     <button type="submit">Sign Up</button>
 </form>
