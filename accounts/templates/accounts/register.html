@@ -1,17 +1,96 @@
-<h2>Student Registration</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Registration</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+<body>
 
-{% if error %}
-<p style="color:red;">{{ error }}</p>
-{% endif %}
+<div id="bg-overlay"></div>
+<video autoplay muted loop id="bg-video">
+    <source src="{% static 'assets/spi-vid.mp4' %}" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
 
-<form method="POST">
-    {% csrf_token %}
-    <input name="username" placeholder="Username" required> <br>
-    <input name="email" type="email" placeholder="Email" required> <br>
-    <input name="course" placeholder="Course" required> <br>
-    <input name="year_level" type="number" placeholder="Year Level" required> <br>
-    <input name="password" type="password" placeholder="Password" required>
-    <button type="submit">Sign Up</button>
-</form>
+<div class="container">
+    <div class="branding">
+        <h1>REGISTER</h1>
+        <h2>@scholarlySPI</h2>
+        <img src="{% static 'assets/main-logo.png' %}" alt="Logo">
+        <p>Access scholarlySPI and experience the convenience of applying for scholarships with ease.</p>
+    </div>
 
-<p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+    <div class="form-box">
+        <h2>LET'S FIRST SIGN YOU UP</h2>
+
+        {% if error %}
+            <p style="color:red; text-align:center;">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <label>Student ID</label>
+            <input type="text" name="student_id" required>
+
+            <label>Full Name</label>
+            <input type="text" name="username" required>
+
+            <label>Email</label>
+            <input type="email" name="email" required>
+
+            <label>Course</label>
+            <select name="course" required>
+                <option value="">Select your course</option>
+
+                <optgroup label="College Courses">
+                    <option value="BSCS">BS Computer Science</option>
+                    <option value="BSTourism">BS Tourism Management</option>
+                    <option value="BSEd">BS Elementary Education</option>
+                    <option value="BSHM">BS Hospitality Management</option>
+                    <option value="BSBM">BS Business Management</option>
+                    <option value="BSEDU">BS Secondary Education</option>
+                </optgroup>
+
+                <optgroup label="Senior High School Tracks">
+                    <option value="SHS-ABM">ABM</option>
+                    <option value="SHS-STEM">STEM</option>
+                    <option value="SHS-HUMSS">HUMSS</option>
+                    <option value="SHS-GAS">GAS</option>
+                    <option value="SHS-ICT">ICT</option>
+                    <option value="SHS-HE">Home Economics</option>
+                    <option value="SHS-IA">Industrial Arts</option>
+                    <option value="SHS-ARTS">Arts & Design</option>
+                </optgroup>
+            </select>
+
+            <label>Year Level</label>
+            <select name="year_level" required>
+                <option value="">Select year level</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+                <option value="5">5th Year</option>
+            </select>
+
+            <label>Password</label>
+            <input type="password" name="password" required>
+
+            <label>Profile Image</label>
+            <input type="file" name="profile_image" accept="image/*">
+
+            <button type="submit">REGISTER</button>
+        </form>
+
+        <p class="subtext">
+            Already have an account?
+            <a href="{% url 'login' %}">Login here</a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

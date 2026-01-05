@@ -96,6 +96,7 @@ def register(request):
         student_id = request.POST.get('student_id')
         course = request.POST.get('course')
         year_level = request.POST.get('year_level')
+        profile_image = request.FILES.get('profile_image')
 
         if User.objects.filter(email=email).exists():
             return render(request, 'accounts/register.html', {
@@ -115,7 +116,8 @@ def register(request):
             user=user,
             student_id=student_id,
             course=course,
-            year_level=year_level
+            year_level=year_level,
+            profile_image=profile_image
         )
 
         return redirect('login')

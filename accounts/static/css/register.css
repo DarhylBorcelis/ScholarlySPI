@@ -1,0 +1,215 @@
+@font-face {
+    font-family: 'regular';
+    src: url('../fonts/regular.ttf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FontspringDEMO';
+    src: url('../fonts/Fontspring-DEMO-tt_commons_pro_regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FontspringDEMO_black';
+    src: url('../fonts/Fontspring-DEMO-tt_commons_pro_bold.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:'regular', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #fff;
+    overflow: hidden;
+}
+
+#bg-video {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -2;
+}
+
+#bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.45);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.container {
+    display: flex;
+    width: 900px;
+    height: 550px;
+    background:  #0a6847;
+    backdrop-filter: blur(12px);
+    padding: 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    z-index: 1;
+}
+
+.branding {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.branding h1 {
+    font-size: 58px;
+    font-weight: bold;
+    font-family: 'FontspringDEMO_black';
+
+}
+
+.branding h2 {
+    font-family: 'courier new';
+}
+
+.branding img {
+    width: 180px;
+    height: auto;
+    margin: 25px 0;
+}
+
+.branding p {
+    font-size: 15px;
+    max-width: 80%;
+    line-height: 1.5;
+}
+
+.form-box {
+    flex: 1.5;
+    background: #f4fffb;
+    padding: 15px;
+    border-radius: 0;
+    color: #222;
+    overflow-y: none;
+}
+
+
+.form-box span {
+    font-family: 'regular', Courier, monospace;
+    text-align: center;
+    font-size: 11px;
+    color: #5d5d5d;
+}
+
+.form-box h2 {
+    font-size: 25px;
+    font-weight: bold;
+    font-family: 'regular';
+    margin-bottom: 3px;
+    color: #00432c;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin: 8px 0 7px;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    border-color: #0a6847;
+}
+
+button {
+    width: 100%;
+    margin-top: 13px;
+    padding: 12px;
+    border-radius: 6px;
+    background: #0a6847;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+
+.flash-message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flash-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.subtext {
+    padding-top: 7px;
+    font-size: 13.5px;
+    text-align: LEFT;
+}
+
+.subtext a {
+    color: #2670aa;
+    text-decoration: none;
+}
+
+subtext a:hover {
+    text-decoration: underline;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 18px;
+    width: 100%;
+}
+
+.form-box label {
+    margin: 0;
+    font-weight: 100;
+    font-size: 14px;
+    width: auto;
+    position: static;
+}
+
+.form-box input,
+.form-box select {
+    margin-bottom: 0;
+}
+
