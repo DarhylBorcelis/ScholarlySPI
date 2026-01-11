@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Application Form</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    {% load static %}
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/user_sideCSS/userDocuments.css' %}">
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- BACKGROUND LAYER -->
+    <div class="bg-layer"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- Profile picture -->
+      <div class="profile-pic-container">
+        <img src="{% static 'assets/main-logo.png' %}" alt="Student Photo" class="profile-pic" />
+      </div>
+
+      <!-- Box 1: Menus -->
+      <div class="sidebar-box box1">
+        <nav class="box-menu">
+          <ul>
+            <li><a href="{% url 'student_dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'user_documents' %}">Documents</a></li>
+            <li><a href="{% url 'student_settings' %}">Settings</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Box 2: Placeholder for future plans -->
+      <div class="sidebar-box box2">
+        <div class="box2-image">
+          <img src="{% static 'assets/tele.png' %}" alt="School Logo" />
+        </div>
+
+        <h4>Have Questions?</h4>
+        <ul class="assistance-info">
+          <li><i class="fas fa-globe"></i> <a href="https://www.schoolwebsite.edu" target="_blank">spi.edu.ph</a></li>
+          <li><i class="fas fa-phone"></i> 02 12365678</li>
+          <li><i class="fas fa-mobile-alt"></i> 63 912 355 6789</li>
+        </ul>
+      </div>
+
+      <div class="box3">
+        <ul class="logout-menu">
+          <a href="{% url 'logout' %}">Logout</a>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- MAIN FLOATING CONTENT -->
+    <div class="app-container">
+
+      <div class="parent">
+        <div class="div1">
+          <div class="flex-box boxA">
+            <div class="documents-section">
+              <h1>Document Manager</h1>
+              <h3>Manage and upload your requisites here.</h3>
+            </div>
+          </div>
+
+          <div class="flex-box boxB">
+            <div class="search-wrapper">
+              <span class="search-icon">
+                <!-- magnifying glass SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#0a6847" viewBox="0 0 24 24">
+                  <path
+                    d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
+                </svg>
+              </span>
+              <input type="text" placeholder="Search..." class="search-bar">
+            </div>
+          </div>
+        </div>
+        <div class="div2">
+          <div class="row-box rowA">
+            <!-- A1: Heading -->
+            <div class="inner-box innerA">
+              <button class="upload-btn">
+                <i class="fas fa-upload"></i> Upload Files
+              </button>
+            </div>
+
+            <!-- A2: Upload button -->
+
+          </div>
+
+          <div class="recents-header">
+            <h2>Recents</h2>
+          </div>
+          {% for app in application %}
+          <div class="row-box rowB">
+            <div class="gray-box g1">
+              <i class="fas fa-file-alt"></i>
+              <div   class="file-info">
+                <h4><a href="{{ app.enrollment_certificate.url }}" target="_blank">Enrollment Form</a></h4>
+                <span>Added Jan 7</span>
+              </div>
+            </div>
+
+            <div class="gray-box g2">
+              <i class="fas fa-file-signature"></i>
+              <div class="file-info">
+                <h4><a href="{{ app.scholarship_letter.url }}" target="_blank">Scholarship Letter</a></h4>
+                <span>Added Jan 6</span>
+              </div>
+            </div>
+
+            <div class="gray-box g3">
+              <i class="fas fa-file-pdf"></i>
+              <div class="file-info">
+                <h4><a href="{{ app.transcript_of_records.url }}" target="_blank">Transcript of Records</a></h4>
+                <span>Added Jan 5</span>
+              </div>
+            </div>
+
+            <div class="gray-box g4">
+              <i class="fas fa-file-word"></i>
+              <div class="file-info">
+                <h4><a href="{{ app.recommendation_letter.url }}" target="_blank">Recommendation Letter</a></h4>
+                <span>Added Jan 2</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="div3">
+          <div class="recents-header">
+            <h2>My Files</h2>
+          </div>
+
+          <table class="asset-table">
+            <thead>
+              <tr>
+                <th>Asset Name</th>
+                <th>Tag</th>
+                <th>Created</th>
+                <th>Owner</th>
+                <th>Last Modified</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Enrollment Form</td>
+                <td><span class="tag tag-form">Form</span></td>
+                <td>Jan 7</td>
+                <td>Al</td>
+                <td>Jan 7</td>
+              </tr>
+              <tr>
+                <td>Scholarship Letter</td>
+                <td><span class="tag tag-letter">Letter</span></td>
+                <td>Jan 6</td>
+                <td>Al</td>
+                <td>Jan 6</td>
+              </tr>
+              <tr>
+                <td>Transcript of Records</td>
+                <td><span class="tag tag-doc">Document</span></td>
+                <td>Jan 5</td>
+                <td>Al</td>
+                <td>Jan 5</td>
+              </tr>
+              <tr>
+                <td>Recommendation Letter</td>
+                <td><span class="tag tag-letter">Letter</span></td>
+                <td>Jan 2</td>
+                <td>Al</td>
+                <td>Jan 2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="div4">
+          <div class="vbox v1">
+            <div class="table-header">
+              <h2>ACCEPTED DOCUMENTS</h2>
+              <p class="subtitle">
+                Admins can review submitted documents and mark them as Pending or Accepted.
+              </p>
+            </div>
+
+            <table class="doc-status-table">
+              <thead>
+                <tr>
+                  <th>Document</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Enrollment Form</td>
+                  <td><span class="status pending">Pending</span></td>
+                </tr>
+                <tr>
+                  <td>Scholarship Letter</td>
+                  <td><span class="status accepted">Accepted</span></td>
+                </tr>
+                <tr>
+                  <td>Recommendation Letter</td>
+                  <td><span class="status accepted">Accepted</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="vbox v2">
+            <div class="table-header">
+              <h2>REJECTED DOCUMENTS</h2>
+              <p class="subtitle">
+                Admins can provide reasons why a document was denied. Click the Message to view details.
+              </p>
+            </div>
+
+            <table class="doc-rejected-table">
+              <thead>
+                <tr>
+                  <th>Rejected</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Transcript of Records</td>
+                  <td>
+                    <span class="reason-message" onclick="openModal()">Message</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal -->
+          <div id="reasonModal" class="modal">
+            <div class="modal-content">
+              <span class="close" onclick="closeModal()">&times;</span>
+              <h3>Admin Message</h3>
+              <p>The transcript of records was denied because the document is incomplete and missing signatures.</p>
+            </div>
+          </div>
+
+          <script>
+            function openModal() {
+              document.getElementById("reasonModal").style.display = "block";
+            }
+
+            function closeModal() {
+              document.getElementById("reasonModal").style.display = "none";
+            }
+
+            // Optional: close modal when clicking outside
+            window.onclick = function (event) {
+              const modal = document.getElementById("reasonModal");
+              if (event.target === modal) {
+                modal.style.display = "none";
+              }
+            }
+          </script>
+
+        </div>
+      </div>
+
+    </div>
+
+</body>
+
+</html>

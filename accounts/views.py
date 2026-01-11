@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
 
 from django.contrib.auth.models import User
-from .models import StudentProfile, ScholarshipApplication, Renewal
+from .models import StudentProfile, ScholarshipApplication,Renewal
 
 
 # HOME PAGE
@@ -26,13 +26,10 @@ def is_teacher_or_admin(user):
 @user_passes_test(is_student)
 def student_dashboard(request):
     applications = ScholarshipApplication.objects.filter(student=request.user)
-    renewals = Renewal.objects.filter(student=request.user)
-    
     has_approved = applications.filter(status='Approved').exists()
 
     return render(request, 'student/dashboard.html', {
         'applications': applications,
-        'renewals': renewals,
         'has_approved': has_approved
     })
 @user_passes_test(is_teacher)
@@ -61,23 +58,34 @@ def teacher_dashboard(request):
 def admin_dashboard(request):
     if request.method == 'POST':
         action = request.POST.get('action')
-        if 'app_id' in request.POST:
-            app = get_object_or_404(ScholarshipApplication, id=request.POST['app_id'])
-            app.status = action
-            app.save()
 
-        elif 'renewal_id' in request.POST:
-            renew = get_object_or_404(Renewal, id=request.POST['renewal_id'])
-            renew.status = action
-            renew.save()
+        # allowed statuses (important for safety)
+        if action not in ['Approved', 'Rejected', 'Pending']:
+            return redirect('admin_dashboard')
+
+        # Scholarship Application update
+        app_id = request.POST.get('app_id')
+        if app_id:
+            application = get_object_or_404(ScholarshipApplication, id=app_id)
+            application.status = action
+            application.save()
+
+        # Renewal update
+        renewal_id = request.POST.get('renewal_id')
+        if renewal_id:
+            renewal = get_object_or_404(Renewal, id=renewal_id)
+            renewal.status = action
+            renewal.save()
+
         return redirect('admin_dashboard')
 
+    # GET request
     applications = ScholarshipApplication.objects.all().order_by('-submitted_at')
     renewals = Renewal.objects.all().order_by('-submitted_at')
 
     return render(request, 'admin/dashboard.html', {
         'applications': applications,
-        'renewals': renewals
+        'renewals': renewals,
     })
 
 # SETTINGS FOR STUDENTS PROFILE
@@ -162,78 +170,105 @@ def apply_scholarship(request):
         if existing:
             return redirect('student_dashboard')
 
-        gpa = request.POST.get('gpa')
+        student_number = request.POST.get('student_number')
+        previous_school = request.POST.get('previous_school')
+        school_year = request.POST.get('school_year')
+        surname = request.POST.get('surname')
+        firstname = request.POST.get('firstname')
+        middlename = request.POST.get('middlename')
+        sex = request.POST.get('sex')
+        age = request.POST.get('age')
+        street_no = request.POST.get('street_no')
+        city = request.POST.get('city')
+        province = request.POST.get('province')
+        cellphone = request.POST.get('cellphone')
         semester = request.POST.get('semester')
+        strand_course = request.POST.get('strand_course')
+        application_date = request.POST.get('application_date')
 
+        proof_identity = request.FILES.get('proof_identity')
         birth_certificate = request.FILES.get('birth_certificate')
-        report_card = request.FILES.get('report_card')
-        enrollment_cert = request.FILES.get('enrollment_cert')
+        transcript_records = request.FILES.get('transcript_records')
+        enrollment_certificate = request.FILES.get('enrollment_certificate')
         good_moral = request.FILES.get('good_moral')
-        id_photo = request.FILES.get('id_photo')
+        scholarship_essay = request.FILES.get('scholarship_essay')
 
         ScholarshipApplication.objects.create(
             student=request.user,
-            gpa=gpa,
+            student_number=student_number,
+            previous_school=previous_school,
+            school_year=school_year,
+            surname=surname,
+            firstname=firstname,
+            middlename=middlename,
+            sex=sex,
+            age=age,
+            street_no=street_no,
+            city=city,
+            province=province,
+            cellphone=cellphone,
             semester=semester,
+            strand_course=strand_course,
+            application_date=application_date,
+            proof_identity=proof_identity,
             birth_certificate=birth_certificate,
-            report_card=report_card,
-            enrollment_cert=enrollment_cert,
+            transcript_records=transcript_records,
+            enrollment_certificate=enrollment_certificate,
             good_moral=good_moral,
-            id_photo=id_photo
+            scholarship_essay=scholarship_essay
         )
 
         return redirect('student_dashboard')
-
     return render(request, 'accounts/apply.html')
-@user_passes_test(is_student)
-def apply_renewal(request):
-    scholarship = ScholarshipApplication.objects.filter(
-        student=request.user,
-        status='Approved'
-    ).first()
+# @user_passes_test(is_student)
+# def apply_renewal(request):
+#     scholarship = ScholarshipApplication.objects.filter(
+#         student=request.user,
+#         status='Approved'
+#     ).first()
 
-    latest_renewal = Renewal.objects.filter(
-        student=request.user,
-        scholarship=scholarship
-    ).order_by('-submitted_at').first()
+#     latest_renewal = Renewal.objects.filter(
+#         student=request.user,
+#         scholarship=scholarship
+#     ).order_by('-submitted_at').first()
 
 
-    if not scholarship:
-        return redirect('student_dashboard')
+#     if not scholarship:
+#         return redirect('student_dashboard')
 
-    if latest_renewal and latest_renewal.status != 'Approved' and latest_renewal.status != 'Rejected':
-        return redirect('student_dashboard')
+#     if latest_renewal and latest_renewal.status != 'Approved' and latest_renewal.status != 'Rejected':
+#         return redirect('student_dashboard')
 
-    if request.method == 'POST':
-        semester = request.POST.get('semester')
-        gpa = request.POST.get('gpa')
+#     if request.method == 'POST':
+#         semester = request.POST.get('semester')
+#         gpa = request.POST.get('gpa')
 
-        birth_certificate = request.FILES.get('birth_certificate')
-        report_card = request.FILES.get('report_card')
-        enrollment_cert = request.FILES.get('enrollment_cert')
-        good_moral = request.FILES.get('good_moral')
-        id_photo = request.FILES.get('id_photo')
+#         birth_certificate = request.FILES.get('birth_certificate')
+#         report_card = request.FILES.get('report_card')
+#         enrollment_cert = request.FILES.get('enrollment_cert')
+#         good_moral = request.FILES.get('good_moral')
+#         id_photo = request.FILES.get('id_photo')
     
-        if Renewal.objects.filter( student=request.user, scholarship=scholarship, semester=semester).exists():
-            return redirect('student_dashboard')
+#         if Renewal.objects.filter( student=request.user, scholarship=scholarship, semester=semester).exists():
+#             return redirect('student_dashboard')
 
-        Renewal.objects.create(
-            student=request.user,
-            scholarship=scholarship,
-            semester=semester,
-            gpa=gpa,
-            birth_certificate=birth_certificate,
-            report_card=report_card,
-            enrollment_cert=enrollment_cert,
-            good_moral=good_moral,
-            id_photo=id_photo
-        )
+#         Renewal.objects.create(
+#             student=request.user,
+#             scholarship=scholarship,
+#             semester=semester,
+#             gpa=gpa,
+#             birth_certificate=birth_certificate,
+#             report_card=report_card,
+#             enrollment_cert=enrollment_cert,
+#             good_moral=good_moral,
+#             id_photo=id_photo
+#         )
 
-        return redirect('student_dashboard')
+#         return redirect('student_dashboard')
 
-    return render(request, 'accounts/apply_renewal.html', {
-        'scholarship': scholarship
-    })
+#     return render(request, 'accounts/apply_renewal.html', {
+#         'scholarship': scholarship
+#     })
 
 # CRUD FOR ADMIN APPLICATIONS
 @user_passes_test(is_admin) # admin only
@@ -242,12 +277,12 @@ def delete_application(request, app_id):
     application.delete()
     return redirect('admin_dashboard')
 
-# CRUD FOR ADMIN RENEWALS
-@user_passes_test(is_admin) # admin only
-def delete_renewal(request, renewal_id):
-    renew = get_object_or_404(Renewal, id=renewal_id)
-    renew.delete()
-    return redirect('admin_dashboard')
+# # CRUD FOR ADMIN RENEWALS
+# @user_passes_test(is_admin) # admin only
+# def delete_renewal(request, renewal_id):
+#     renew = get_object_or_404(Renewal, id=renewal_id)
+#     renew.delete()
+#     return redirect('admin_dashboard')
 
 # CRUD FOR STUDENT PROFILES
 @user_passes_test(is_student)
@@ -290,11 +325,17 @@ def delete_profile(request):
     user.delete()
     return redirect('register')
 
+@user_passes_test(is_student)
+def user_documents(request):
+    profile = getattr(request.user, 'studentprofile', None)
 
+    application = ScholarshipApplication.objects.filter(student=request.user)
 
-#
-#
-#
+    return render(request, 'student/documents.html', {
+        'profile': profile,
+        'application': application,
+    })
+
 
 
 

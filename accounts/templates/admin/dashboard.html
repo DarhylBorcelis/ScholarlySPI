@@ -1,127 +1,96 @@
-<h2>Admin Dashboard</h2>
+<h2>Scholarship Renewals</h2>
 
-<!-- Scholarship Applications -->
-<h3>Scholarship Applications</h3>
-<table border="1" cellpadding="10">
-    <thead>
-        <tr>
-            <th>Student</th>
-            <th>Semester</th>
-            <th>GPA</th>
-            <th>Status</th>
-            <th>Documents</th>
-            <th>Submitted</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for app in applications %}
-        <tr>
-            <td>{{ app.student.username }}</td>
-            <td>{{ app.semester }}</td>
-            <td>{{ app.gpa }}</td>
-            <td>{{ app.status }}</td>
-            <td>
-                {% if app.birth_certificate %}
-                    <a href="{{ app.birth_certificate.url }}" target="_blank">Birth Certificate</a><br>
-                {% endif %}
-                {% if app.report_card %}
-                    <a href="{{ app.report_card.url }}" target="_blank">Report Card</a><br>
-                {% endif %}
-                {% if app.enrollment_cert %}
-                    <a href="{{ app.enrollment_cert.url }}" target="_blank">Enrollment Cert</a><br>
-                {% endif %}
-                {% if app.good_moral %}
-                    <a href="{{ app.good_moral.url }}" target="_blank">Good Moral</a><br>
-                {% endif %}
-                {% if app.id_photo %}
-                    <a href="{{ app.id_photo.url }}" target="_blank">ID Photo</a><br>
-                {% endif %}
-            </td>
-            <td>{{ app.submitted_at }}</td>
-            <td>
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="app_id" value="{{ app.id }}">
-                    <button name="action" value="Approved">Approve</button>
-                    <button name="action" value="Rejected">Reject</button>
-                </form>
-                <form method="POST" action="{% url 'delete_application' app.id %}">
-                    {% csrf_token %}
-                    <button onclick="return confirm('Delete this application?')">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6">No applications yet</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+<table border="1" cellpadding="8">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Semester</th>
+      <th>Linked Scholarship</th>
+      <th>Status</th>
+      <th>Submitted At</th>
+      <th>Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for renewal in renewals %}
+    <tr>
+      <td>{{ renewal.student.username }}</td>
+      <td>{{ renewal.semester }}</td>
+      <td>{{ renewal.scholarship.school_year }} - {{ renewal.scholarship.semester }}</td>
+      <td>{{ renewal.status }}</td>
+      <td>{{ renewal.submitted_at }}</td>
+      <td>
+        {% if renewal.enrollment_cert %}
+          <a href="{{ renewal.enrollment_cert.url }}" target="_blank">Enrollment</a><br>
+        {% endif %}
+        {% if renewal.birth_certificate %}
+          <a href="{{ renewal.birth_certificate.url }}" target="_blank">Birth Cert</a><br>
+        {% endif %}
+        {% if renewal.report_card %}
+          <a href="{{ renewal.report_card.url }}" target="_blank">Report Card</a><br>
+        {% endif %}
+        {% if renewal.good_moral %}
+          <a href="{{ renewal.good_moral.url }}" target="_blank">Good Moral</a><br>
+        {% endif %}
+        {% if renewal.id_photo %}
+          <a href="{{ renewal.id_photo.url }}" target="_blank">ID Photo</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="6">No renewals found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
-<hr>
 
-<h3>Scholarship Renewals</h3>
-<table border="1" cellpadding="10">
-    <thead>
-        <tr>
-            <th>Student</th>
-            <th>Scholarship</th>
-            <th>Semester</th>
-            <th>GPA</th>
-            <th>Status</th>
-            <th>Documents</th>
-            <th>Submitted</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for renewal in renewals %}
-        <tr>
-            <td>{{ renewal.student.username }}</td>
-            <td>{{ renewal.scholarship.student.username }} Application</td>
-            <td>{{ renewal.semester }}</td>
-            <td>{{ renewal.gpa }}</td>
-            <td>{{ renewal.status }}</td>
-            <td>
-                {% if renewal.birth_certificate %}
-                    <a href="{{ renewal.birth_certificate.url }}" target="_blank">Birth Certificate</a><br>
-                {% endif %}
-                {% if renewal.report_card %}
-                    <a href="{{ renewal.report_card.url }}" target="_blank">Report Card</a><br>
-                {% endif %}
-                {% if renewal.enrollment_cert %}
-                    <a href="{{ renewal.enrollment_cert.url }}" target="_blank">Enrollment Cert</a><br>
-                {% endif %}
-                {% if renewal.good_moral %}
-                    <a href="{{ renewal.good_moral.url }}" target="_blank">Good Moral</a><br>
-                {% endif %}
-                {% if renewal.id_photo %}
-                    <a href="{{ renewal.id_photo.url }}" target="_blank">ID Photo</a><br>
-                {% endif %}
-            </td>
-            <td>{{ renewal.submitted_at }}</td>
-            <td>
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="renewal_id" value="{{ renewal.id }}">
-                    <button name="action" value="Approved">Approve</button>
-                    <button name="action" value="Rejected">Reject</button>
-                </form>
-                <form method="POST" action="{% url 'delete_renewal' renewal.id %}">
-                    {% csrf_token %}
-                    <button onclick="return confirm('Delete this renewal?')">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="8">No renewals yet</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+<h2>Scholarship Applications</h2>
+
+<table border="1" cellpadding="8">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Semester</th>
+      <th>School Year</th>
+      <th>Strand / Course</th>
+      <th>Status</th>
+      <th>Application Date</th>
+      <th>Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for app in applications %}
+    <tr>
+      <td>{{ app.surname }}, {{ app.firstname }}</td>
+      <td>{{ app.semester }}</td>
+      <td>{{ app.school_year }}</td>
+      <td>{{ app.strand_course }}</td>
+      <td>{{ app.status }}</td>
+      <td>{{ app.application_date }}</td>
+      <td>
+        {% if app.enrollment_certificate %}
+          <a href="{{ app.enrollment_certificate.url }}" target="_blank">Enrollment</a><br>
+        {% endif %}
+        {% if app.birth_certificate %}
+          <a href="{{ app.birth_certificate.url }}" target="_blank">Birth Cert</a><br>
+        {% endif %}
+        {% if app.transcript_records %}
+          <a href="{{ app.transcript_records.url }}" target="_blank">TOR</a><br>
+        {% endif %}
+        {% if app.good_moral %}
+          <a href="{{ app.good_moral.url }}" target="_blank">Good Moral</a><br>
+        {% endif %}
+        {% if app.scholarship_essay %}
+          <a href="{{ app.scholarship_essay.url }}" target="_blank">Essay</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="7">No scholarship applications found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
-
-<br>
-<a href="{% url 'logout' %}">Logout</a>

@@ -1,37 +1,214 @@
-<h2>Apply for Scholarship</h2>
+<!DOCTYPE html>
+<html lang="en">
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    <!-- GPA -->
-    <label>GPA</label><br>
-    <input type="number" name="gpa" step="0.01" placeholder="Enter your GPA" required><br><br>
+<head>
+  <meta charset="UTF-8">
+  <title>Application Form</title>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <label>Semester</label><br>
-        <select name="semester" required>
-            <option value="">-- Select Semester --</option>
-            <option value="1st Semester">1st Semester</option>
-            <option value="2nd Semester">2nd Semester</option>
-            <option value="3rd Semester">3rd Semester</option>
-            <option value="4th Semester">4th Semester</option>
-        </select>
-    <br><br>
-    
-    <!-- Documents -->
-    <label>Birth Certificate</label><br>
-    <input type="file" name="birth_certificate" required><br><br>
-    
-    <label>Report Card</label><br>
-    <input type="file" name="report_card" required><br><br>
-    
-    <label>Certificate of Enrollment</label><br>
-    <input type="file" name="enrollment_cert" required><br><br>
-    
-    <label>Good Moral Certificate</label><br>
-    <input type="file" name="good_moral" required><br><br>
-    
-    <label>ID Photo</label><br>
-    <input type="file" name="id_photo" required><br><br>
-    
-    <button type="submit">Submit Application</button>
-</form>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href=  "{% static 'css/user_sideCSS/applicationForm.css' %}">
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- BACKGROUND LAYER -->
+    <div class="bg-layer"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- Logo picture -->
+      <div class="profile-pic-container">
+        <img src="{% static 'assets/main-logo.png' %}" alt="Student Photo" class="profile-pic" />
+      </div>
+
+      <!-- Box 1: Menus -->
+      <div class="sidebar-box box1">
+        <nav class="box-menu">
+          <ul>
+            <li><a href="{% url 'student_dashboard' %}">Dashboard</a></li>
+            <li><a href="">Documents</a></li>
+            <li><a href="{% url 'student_settings' %}">Settings</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Box 2: Placeholder for future plans -->
+      <div class="sidebar-box box2">
+        <div class="box2-image">
+          <img src="{% static 'assets/tele.png' %}" alt="School Logo" />
+        </div>
+
+        <h4>Have Questions?</h4>
+        <ul class="assistance-info">
+          <li><i class="fas fa-globe"></i> <a href="https://www.schoolwebsite.edu" target="_blank">spi.edu.ph</a></li>
+          <li><i class="fas fa-phone"></i> 02 12365678</li>
+          <li><i class="fas fa-mobile-alt"></i> 63 912 355 6789</li>
+        </ul>
+      </div>
+
+      <div class="box3">
+        <ul class="logout-menu">
+          <a href="{% url 'logout' %}">Logout</a>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- MAIN FLOATING CONTENT -->
+    <div class="app-container">
+      <div class="two-columns">
+        <div class="column left">
+          <h2 class="form-heading"> Application Form</h2>
+          <p class="form-subheading">Please fill out all required fields accurately before submitting.</p>
+
+        <form method="post" class="responsive-form">
+            {% csrf_token %}
+            <!-- First row: Student Number + Previous School -->
+            <div class="frm_first frm_third">
+              <label>Student Number</label>
+              <input type="text" name="student_number" required>
+            </div>
+
+            <div class="frm_third">
+              <label>Previous School</label>
+              <input type="text" name="previous_school" required>
+            </div>
+
+            <div class="frm_third">
+              <label>School Year</label>
+              <input type="text" name="school_year" placeholder="2025-2026" required>
+            </div>
+
+            <!-- Next row: Surname, First Name, Middle Name, Sex -->
+            <div class="frm_first frm_fourth">
+              <label>Surname</label>
+              <input type="text" name="surname" required>
+            </div>
+
+            <div class="frm_fourth">
+              <label>First Name</label>
+              <input type="text" name="firstname" required>
+            </div>
+
+            <div class="frm_fourth">
+              <label>Middle Name</label>
+              <input type="text" name="middlename">
+            </div>
+
+            <div class="frm_first">
+              <label>Sex</label>
+              <select name="sex" required>
+                <option value="">Select</option>
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+            </div>
+
+            <div class="frm_first">
+              <label>Age</label>
+              <input type="number" name="age" min="1" required>
+            </div>
+
+            <!-- Address + Age -->
+            <div class=" frm_fourth frm_fourth">
+              <label>Street Info.</label>
+              <input type="text" name="street_no" required>
+            </div>
+
+            <div class="frm_fourth">
+              <label>City / Municipality</label>
+              <input type="text" name="city" required>
+            </div>
+
+            <div class="frm_fourth">
+              <label>Province</label>
+              <input type="text" name="province" required>
+            </div>
+
+
+
+
+
+            <!-- Contact numbers -->
+            <div class="frm_first frm_third">
+              <label>Cellphone No.</label>
+              <input type="tel" name="cellphone" pattern="[0-9]{11}" placeholder="09xxxxxxxxx" required>
+            </div>
+
+
+
+
+
+            <!-- Semester + Submit -->
+            <div class="frm_first">
+              <label>Semester</label>
+              <select name="semester" required>
+                <option value="">Select</option>
+                <option>1st</option>
+                <option>2nd</option>
+              </select>
+            </div>
+
+            <div class="frm_two_thirds">
+              <label>Strand / Course</label>
+              <input type="text" name="strand_course" required>
+            </div>
+
+            <div class="frm_first frm_third">
+              <label>Application Date</label>
+              <input type="date" name="application_date" required>
+            </div>
+
+
+
+            </div>
+            <div class="column right">
+            <h2 class="form-heading"> Document Uploads</h2>
+            <p class="form-subheading">Upload all required files before submitting your application.</p>
+
+
+            <div class="upload-card">
+              <label for="proof_identity">Proof of Identity</label>
+              <input type="file" id="proof_identity" name="proof_identity" accept="image/*,.pdf" required>
+            </div>
+
+            <div class="upload-card">
+              <label for="birth_certificate">Birth Certificate</label>
+              <input type="file" id="birth_certificate" name="birth_certificate" accept="image/*,.pdf" required>
+            </div>
+
+            <div class="upload-card">
+              <label for="transcript_records">Transcript of Records</label>
+              <input type="file" id="transcript_records" name="transcript_records" accept="image/*,.pdf" required>
+            </div>
+
+            <div class="upload-card">
+              <label for="enrollment_certificate">Enrollment Certificate / Form</label>
+              <input type="file" id="enrollment_certificate" name="enrollment_certificate" accept="image/*,.pdf"
+                required>
+            </div>
+
+            <div class="upload-card">
+              <label for="good_moral">Good Moral Certificate</label>
+              <input type="file" id="good_moral" name="good_moral" accept="image/*,.pdf" required>
+            </div>
+
+            <div class="upload-card">
+              <label for="scholarship_essay">Scholarship Essay</label>
+              <input type="file" id="scholarship_essay" name="scholarship_essay" accept="image/*,.pdf" required>
+            </div>
+
+            <button type="submit" class="apply-btn">Submit Application</button>
+        </form>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+</html>
