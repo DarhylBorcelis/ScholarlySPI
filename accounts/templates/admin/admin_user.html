@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Layered Dashboard - Users</title>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/admin_sideCSS/adminUser.css' %}">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- BACKGROUND LAYER -->
+  <div class="bg-layer"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="profile-pic-container">
+      <img src="{% static 'assets/main-logo.png' %}" alt="Student Photo" class="profile-pic" />
+    </div>
+
+    <div class="sidebar-box box1">
+      <nav class="box-menu">
+        <ul>
+          <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+          <li><a href="{% url 'admin_applications' %}">Applications</a></li>
+          <li><a href="{% url 'admin_renewals' %}">Renewals</a></li>
+          <li><a href="{% url 'admin_user' %}">Users</a></li>
+          <li><a href="{% url 'admin_archive' %}">Archive</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="sidebar-box box2">
+      <div class="box2-image">
+        <img src="{% static 'assets/tele.png' %}" alt="School Logo" />
+      </div>
+      <h4>Have Questions?</h4>
+      <ul class="assistance-info">
+        <li><i class="fas fa-globe"></i> <a href="https://www.schoolwebsite.edu" target="_blank">spi.edu.ph</a></li>
+        <li><i class="fas fa-phone"></i>  02 12365678</li>
+        <li><i class="fas fa-mobile-alt"></i> 63 912 355 6789</li>
+      </ul>
+    </div>
+
+    <div class="box3">
+      <ul class="logout-menu">
+        <a href="{% url 'logout' %}">Logout</a>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN FLOATING CONTENT -->
+  <div class="app">
+    <div class="parent">
+
+      <!-- Header -->
+      <div class="div1">
+        <div class="boxA">
+          <h2 class="page-heading">Users Management</h2>
+          <p class="page-subheading">View and manage registered users</p>
+        </div>
+        <div class="boxB">
+          <input type="text" class="search-input" placeholder="Search by School ID, name, or email...">
+          <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+<div class="div2">
+  <table class="student-table" style="font-size: 20px;">
+    <thead>
+      <tr>
+        <th>School ID</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Course</th>
+        <th>Year Level</th>
+        <th>Password</th>
+        <th>Profile Image</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            {% if user.studentprofile %}
+            <tr>
+            <td>{{ user.studentprofile.student_id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.studentprofile.course }}</td>
+            <td>{{ user.studentprofile.year_level }}</td>
+            <td>••••••••</td>
+            <td>
+                {% if user.studentprofile.profile_image %}
+                <a href="{{ user.studentprofile.profile_image.url }}" target="_blank">Profile Picture</a>
+                {% else %}
+                <a href="{% static 'assets/users/default.png' %}" target="_blank">Default Profile</a>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'ban_user' user.id %}" style="font-size: 20px;" class="reject-btn">Ban</a>
+            </td>
+            </tr>
+            {% endif %}
+        {% empty %}
+            <tr>
+            <td colspan="8" style="text-align:center;">No users found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+  </table>
+</div>
+    </div>
+</body>
+</html>

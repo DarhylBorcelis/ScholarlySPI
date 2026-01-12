@@ -29,7 +29,7 @@
     <nav class="box-menu">
       <ul>
         <li><a href="{% url 'student_dashboard' %}">Dashboard</a></li>
-        <li><a href="">Documents</a></li>
+        <li><a href="{% url 'user_documents' %}">Documents</a></li>
                 <li><a href="{% url 'student_settings' %}">Settings</a></li>
       </ul>
     </nav>
@@ -64,14 +64,14 @@
 <div class="div1">
   <!-- Left box: user info -->
   <div class="box-left">
-    {% if request.user.studentprofile.profile_pic %}
-     <img src="{{ request.user.studentprofile.profile_pic.url }}" alt="Student Photo" class="profile-pic" />
+    {% if profile.profile_image %}
+     <img src="{{ profile.profile_image.url }}" alt="Student Photo" class="profile-pic" />
     {% else %}
     <img src="{% static 'assets/default-profile.png' %}" alt="Default Photo" class="profile-pic" />
     {% endif %}
 
     <div class="student-info">
-      <p><strong style="font-size: 32PX;">{{ user.username }}</strong> </p>
+      <p><strong style="font-size: 32PX;">{{ profile.user.username }}</strong> </p>
       <p><strong>Student ID:</strong> {{ profile.student_id }}</p>
       <p><strong>Course:</strong> {{ profile.course }}</p>
       <p><strong>Year Level:</strong> {{ profile.year_level }}</p>
@@ -83,6 +83,7 @@
   <button class="edit-btn" onclick="showEditProfile()">Edit Profile</button>
   <button class="password-btn" onclick="showChangePassword()">Change Password</button>
 </div>
+
 </div>
     <!-- Notifications -->
 <div class="div2" id="content-area">
@@ -91,105 +92,119 @@
     <p class="subtitle" style="padding: 5px 0;">Your academic and contact details.</p>
   </div>
   <div class="personal-info-display horizontal-info">
-    <div class="info-item">
-      <i class="fas fa-envelope"></i> <strong>Email Address:</strong> {{ user.email }}
+    {% if applications%}
+    {% for app in applications %}
+    <div class="info-item" >
+      <i class="fas fa-envelope"></i> <strong style="font-size: 20px;">Email Address:</strong><p style="font-size: 25px;"> {{ profile.user.email }}</p>
     </div>
     <div class="info-item">
-      <i class="fas fa-phone"></i> <strong>Contact Number:</strong> 0912 325 6789
+      <i class="fas fa-phone"></i> <strong style="font-size: 20px;">Contact Number:</strong><p style="font-size: 25px;"> {{ app.cellphone }}</p>
     </div>
     <div class="info-item">
-      <i class="fas fa-birthday-cake"></i> <strong>Date of Birth:</strong> FEBRUARY 11, 2003
+      <i class="fas fa-user"></i> <strong style="font-size: 20px;">Gender:</strong> <p style="font-size: 25px;">{{ app.sex}}</p>
     </div>
     <div class="info-item">
-      <i class="fas fa-user"></i> <strong>Gender:</strong> Male
+      <i class="fas fa-user"></i> <strong style="font-size: 20px;">Age:</strong><p style="font-size: 25px;"> {{ app.age}}</p>
+    </div>
+    <div class="info-item">
+      <i class="fas fa-user"></i> <strong style="font-size: 20px;">Strand/Course:</strong><p style="font-size: 25px;"> {{ app.strand_course}}</p>
     </div>
     <div class="info-item wide">
-      <i class="fas fa-home"></i> <strong>Address:</strong> Antipolo City, Rizal
+      <i class="fas fa-home"></i> <strong style="font-size: 20px;">Address:</strong><p style="font-size: 25px;"> {{ app.street_no }}, {{ app.city }}, {{ app.province }}</p>
     </div>
+    {% endfor %}
+    {% else %}
+    <p style="font-size: 25px; color: black">No personal information available. Please Apply For Scholar.</p>
+    {% endif %}
   </div>
 </div>
 
 <script>
-    function showEditProfile() {
+function showEditProfile() {
     document.getElementById("content-area").innerHTML = `
         <div class="table-header">
-        <h2>Edit Profile</h2>
-        <p class="subtitle">Update your personal information.</p>
+            <h2>Edit Profile</h2>
+            <p class="subtitle">Update your personal information.</p>
         </div>
-    <form class="settings-form personal-info-form dashed-form horizontal-form">
-    <div class="form-row">
-        <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" placeholder="Enter your email">
-        </div>
-        <div class="form-group">
-        <label>Contact Number</label>
-        <input type="text" placeholder="Enter your contact number">
-        </div>
-    </div>
 
-    <div class="form-row">
-        <div class="form-group short-field">
-        <label>Date of Birth</label>
-        <input type="date">
-        </div>
-        <div class="form-group short-field">
-        <label>Gender / Pronouns</label>
-        <select>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Prefer not to say</option>
-            <option>Other</option>
-        </select>
-        </div>
-    </div>
+        <form method="post" action="{% url 'update_profile' %}" enctype="multipart/form-data" class="settings-form personal-info-form dashed-form horizontal-form">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Student ID</label>
+                    <input type="text" name="student_id" value="{{ profile.student_id }}" required>
+                </div>
 
-    <div class="form-row">
-        <div class="form-group wide-field">
-        <label>Address</label>
-        <input type="text" placeholder="Enter your address">
-        </div>
-    </div>
+                <div class="form-group">
+                    <label>Course</label>
+                    <input type="text" name="course" value="{{ profile.course }}">
+                </div>
 
-    <div class="form-actions">
-        <button type="submit" class="save-btn">Save Changes</button>
-    </div>
-    </form>
+                <div class="form-group">
+                    <label>Year Level</label>
+                    <input type="number" name="year_level" value="{{ profile.year_level }}">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>GPA</label>
+                    <input type="text" name="gpa" value="{{ profile.gpa }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Profile Image</label>
+                    <input type="file" name="profile_image">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Save Changes</button>
+            </div>
+        </form>
     `;
-    }
+}
 
-    function showChangePassword() {
+function showChangePassword() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
     document.getElementById("content-area").innerHTML = `
         <div class="table-header">
-        <h2>Change Password</h2>
-        <p class="subtitle">Secure your account with a new password.</p>
+            <h2>Change Password</h2>
+            <p class="subtitle">Secure your account with a new password.</p>
         </div>
-        <form class="settings-form dashed-form horizontal-form">
-    <div class="form-row">
-        <div class="form-group short-field">
-        <label>Current Password</label>
-        <input type="password" placeholder="Enter current password">
-        </div>
-        <div class="form-group short-field">
-        <label>New Password</label>
-        <input type="password" placeholder="Enter new password">
-        </div>
-    </div>
 
-    <div class="form-row">
-        <div class="form-group short-field">
-        <label>Confirm Password</label>
-        <input type="password" placeholder="Confirm new password">
-        </div>
-    </div>
+        <form method="post" action="{% url 'student_settings' %}" class="settings-form dashed-form horizontal-form">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group short-field">
+                    <label>Current Password</label>
+                    <input type="password" name="current_password" required>
+                </div>
 
-    <div class="form-actions">
-        <button type="submit" class="save-btn">Save Password</button>
-    </div>
-    </form>
+                <div class="form-group short-field">
+                    <label>New Password</label>
+                    <input type="password" name="new_password" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group short-field">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirm_password" required>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Save Password</button>
+            </div>
+        </form>
     `;
-    }
+}
 </script>
+
 
     <!-- Display Preferences -->
    <div class="div3" id="display-settings">
@@ -234,17 +249,23 @@
   <div class="fit-box">
     <h3>Recent Activities</h3>
     <ul class="activity-list">
-      <li>Logged in from Chrome on Windows — Jan 11, 2026</li>
-      <li>Changed password — Jan 10, 2026</li>
-      <li>Updated profile information — Jan 9, 2026</li>
-      <li>Enabled two-factor authentication — Jan 8, 2026</li>
-    </ul>
+  {% for app in activities %}
+    <li style="font-size: 20px;">
+      Scholarship application submitted —
+      {{ app.submitted_at|date:"M d, Y" }}
+      (Status: {{ app.status }})
+    </li>
+  {% empty %}
+    <li>No recent activities.</li>
+  {% endfor %}
+</ul>
+
   </div>
 
   <!-- Privacy Policy -->
   <div class="fit-box">
     <h3>Privacy Policy</h3>
-    <p>
+    <p style="font-size: 20px;">
       Your data is handled according to our privacy guidelines. We respect your information and
       ensure it is protected. For full details, please review our
       <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank">Privacy Statement</a>.

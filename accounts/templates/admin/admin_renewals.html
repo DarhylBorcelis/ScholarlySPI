@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Layered Dashboard</title>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/admin_sideCSS/adminRenewals.css' %}">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- BACKGROUND LAYER -->
+  <div class="bg-layer"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="profile-pic-container">
+      <img src="{% static 'assets/main-logo.png' %}" alt="Student Photo" class="profile-pic" />
+    </div>
+
+    <div class="sidebar-box box1">
+      <nav class="box-menu">
+        <ul>
+          <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+          <li><a href="{% url 'admin_applications' %}">Applications</a></li>
+          <li><a href="{% url 'admin_renewals' %}">Renewals</a></li>
+          <li><a href="{% url 'admin_user' %}">Users</a></li>
+          <li><a href="{% url 'admin_archive' %}">Archive</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="sidebar-box box2">
+      <div class="box2-image">
+        <img src="{% static 'assets/tele.png' %}" alt="School Logo" />
+      </div>
+      <h4>Have Questions?</h4>
+      <ul class="assistance-info">
+        <li><i class="fas fa-globe"></i> <a href="https://www.schoolwebsite.edu" target="_blank">spi.edu.ph</a></li>
+        <li><i class="fas fa-phone"></i>  02 12365678</li>
+        <li><i class="fas fa-mobile-alt"></i> 63 912 355 6789</li>
+      </ul>
+    </div>
+
+    <div class="box3">
+      <ul class="logout-menu">
+        <a href="{% url 'logout' %}">Logout</a>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN FLOATING CONTENT -->
+  <div class="app">
+    <div class="parent">
+
+      <!-- Header -->
+      <div class="div1">
+        <div class="boxA">
+          <h2 class="page-heading">Scholarship Renewals</h2>
+          <p class="page-subheading">Manage and review renewals here</p>
+        </div>
+        <div class="boxB">
+          <input type="text" class="search-input" placeholder="Search by name, number, or course...">
+          <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+
+      <!-- Renewals Table -->
+      <div class="div2">
+        <table class="student-table" style="font-size: 20px;">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Strand / Course</th>
+              <th>School Year</th>
+              <th>Semester</th>
+              <th>Date of Renewal Request</th>
+              <th>Proof Identity</th>
+              <th>Birth Certificate</th>
+              <th>Transcript Records</th>
+              <th>Enrollment Certificate</th>
+              <th>Good Moral</th>
+              <th>Scholarship Essay</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+                {% for renewal in renewals %}
+                <tr>
+                    <!-- Student Name -->
+                    <td>{{ renewal.student.username }}</td>
+
+                    <!-- Scholarship Info -->
+                    <td>{{ renewal.scholarship.strand_course }}</td>
+                    <td>{{ renewal.scholarship.school_year }}</td>
+                    <td>{{ renewal.semester }}</td>
+
+                    <!-- Submission Date -->
+                    <td>{{ renewal.submitted_at|date:"M d, Y" }}</td>
+
+                    <!-- Documents -->
+                    <td>
+                    {% if renewal.id_photo %}
+                        <a href="{{ renewal.id_photo.url }}" target="_blank">View</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                    </td>
+                    <td>
+                    {% if renewal.birth_certificate %}
+                        <a href="{{ renewal.birth_certificate.url }}" target="_blank">View</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                    </td>
+                    <td>
+                    {% if renewal.report_card %}
+                        <a href="{{ renewal.report_card.url }}" target="_blank">View</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                    </td>
+                    <td>
+                    {% if renewal.enrollment_cert %}
+                        <a href="{{ renewal.enrollment_cert.url }}" target="_blank">View</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                    </td>
+                    <td>
+                    {% if renewal.good_moral %}
+                        <a href="{{ renewal.good_moral.url }}" target="_blank">View</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                    </td>
+
+                    <!-- Status -->
+                    <td>{{ renewal.status }}</td>
+
+                    <!-- Actions -->
+                    <td>
+                    <div class="action-buttons">
+                        <a href="{% url 'accept_renewal' renewal.id %}" class="accept-btn">Accept</a>
+                        <a href="{% url 'reject_renewal' renewal.id %}" class="reject-btn">Reject</a>
+                    </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="12" style="text-align:center;">No renewals submitted yet.</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Document Modal -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    // Document view modal
+    const modal = document.createElement("div");
+    modal.className = "modal";
+    modal.innerHTML = `
+        <div class="modal-content">
+        <img src="" alt="Document" id="modal-img">
+        <div class="close-btn">Close</div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    const modalImg = modal.querySelector("#modal-img");
+    const closeBtn = modal.querySelector(".close-btn");
+
+    document.querySelectorAll(".view-doc").forEach(link => {
+        link.addEventListener("click", e => {
+        e.preventDefault();
+        const imgSrc = link.getAttribute("data-img");
+        modalImg.src = imgSrc;
+        modal.style.display = "flex";
+        });
+    });
+
+    closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    modal.addEventListener("click", e => {
+        if (e.target === modal) modal.style.display = "none";
+    });
+
+    // Reject reason modal
+    const rejectModal = document.createElement("div");
+    rejectModal.className = "reject-modal";
+    rejectModal.innerHTML = `
+        <div class="reject-modal-content">
+        <h3>Reject Renewal Request</h3>
+        <textarea id="reject-reason" placeholder="Type reason for rejection..."></textarea>
+        <div class="modal-actions">
+            <button class="close-reject-btn">Cancel</button>
+            <button class="send-btn">Send</button>
+        </div>
+        </div>
+    `;
+    document.body.appendChild(rejectModal);
+
+    const closeRejectBtn = rejectModal.querySelector(".close-reject-btn");
+    const sendBtn = rejectModal.querySelector(".send-btn");
+    const reasonInput = rejectModal.querySelector("#reject-reason");
+
+    document.querySelectorAll(".reject-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+        rejectModal.style.display = "flex";
+        reasonInput.value = "";
+        });
+    });
+
+    closeRejectBtn.addEventListener("click", () => {
+        rejectModal.style.display = "none";
+    });
+
+    sendBtn.addEventListener("click", () => {
+        const reason = reasonInput.value.trim();
+        if (reason) {
+        alert("Rejection reason sent: " + reason);
+        // Hook into backend here
+        rejectModal.style.display = "none";
+        } else {
+        alert("Please enter a reason before sending.");
+        }
+    });
+
+    rejectModal.addEventListener("click", e => {
+        if (e.target === rejectModal) rejectModal.style.display = "none";
+    });
+    });
+</script>
+
+</body>
+</html>

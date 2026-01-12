@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Layered Dashboard</title>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/admin_sideCSS/adminApplications.css' %}">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- BACKGROUND LAYER -->
+  <div class="bg-layer"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="profile-pic-container">
+      <img src="{% static 'assets/main-logo.png' %}" alt="Student Photo" class="profile-pic" />
+    </div>
+
+    <div class="sidebar-box box1">
+      <nav class="box-menu">
+        <ul>
+          <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+          <li><a href="{% url 'admin_applications' %}">Applications</a></li>
+          <li><a href="{% url 'admin_renewals' %}">Renewals</a></li>
+          <li><a href="{% url 'admin_user' %}">Users</a></li>
+          <li><a href="{% url 'admin_archive' %}">Archive</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="sidebar-box box2">
+      <div class="box2-image">
+        <img src="{% static 'assets/tele.png' %}" alt="School Logo" />
+      </div>
+      <h4>Have Questions?</h4>
+      <ul class="assistance-info">
+        <li><i class="fas fa-globe"></i> <a href="https://www.schoolwebsite.edu" target="_blank">spi.edu.ph</a></li>
+        <li><i class="fas fa-phone"></i>  02 12365678</li>
+        <li><i class="fas fa-mobile-alt"></i> 63 912 355 6789</li>
+      </ul>
+    </div>
+
+    <div class="box3">
+      <ul class="logout-menu">
+        <a href="{% url 'logout' %}">Logout</a>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN FLOATING CONTENT -->
+  <div class="app">
+    <div class="parent">
+
+      <!-- Header -->
+      <div class="div1">
+        <div class="boxA">
+          <h2 class="page-heading">Scholarship Applications</h2>
+          <p class="page-subheading">Search, manage, and review submitted records</p>
+        </div>
+        <div class="boxB">
+          <input type="text" class="search-input" placeholder="Search by name, number, or course...">
+          <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+
+      <!-- Applications Table -->
+      <div class="div2">
+        <table class="student-table" style="font-size:20px;">
+          <thead>
+            <tr>
+              <th>Student ID</th>
+              <th>Previous School</th>
+              <th>School Year</th>
+              <th>Surname</th>
+              <th>Firstname</th>
+              <th>Middlename</th>
+              <th>Sex</th>
+              <th>Age</th>
+              <th>Street No</th>
+              <th>City</th>
+              <th>Province</th>
+              <th>Cellphone</th>
+              <th>Semester</th>
+              <th>Strand/Course</th>
+              <th>Application Date</th>
+              <th>Proof Identity</th>
+              <th>Birth Certificate</th>
+              <th>Transcript Records</th>
+              <th>Enrollment Certificate</th>
+              <th>Good Moral</th>
+              <th>Scholarship Essay</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ app.student.studentprofile.student_id }}</td>
+                <td>{{ app.previous_school }}</td>
+                <td>{{ app.school_year }}</td>
+                <td>{{ app.surname }}</td>
+                <td>{{ app.firstname }}</td>
+                <td>{{ app.middlename }}</td>
+                <td>{{ app.sex }}</td>
+                <td>{{ app.age }}</td>
+                <td>{{ app.street_no }}</td>
+                <td>{{ app.city }}</td>
+                <td>{{ app.province }}</td>
+                <td>{{ app.cellphone }}</td>
+                <td>{{ app.semester }}</td>
+                <td>{{ app.strand_course }}</td>
+                <td>{{ app.application_date|date:"M d, Y" }}</td>
+
+                <!-- Documents -->
+                <td>
+                    <a href="{{ app.proof_identity.url }}" target="_blank">View</a>
+                </td>
+                <td>
+                    <a href="{{ app.birth_certificate.url }}" target="_blank">View</a>
+                </td>
+                <td>
+                    <a href="{{ app.transcript_records.url }}" target="_blank">View</a>
+                </td>
+                <td>
+                    <a href="{{ app.enrollment_certificate.url }}" target="_blank">View</a>
+                </td>
+                <td>
+                    <a href="{{ app.good_moral.url }}" target="_blank">View</a>
+                </td>
+                <td>
+                    <a href="{{ app.scholarship_essay.url }}" target="_blank">View</a>
+                </td>
+                <td>{{ app.status }}</td>
+
+                <!-- Actions -->
+                <td>
+                <div class="action-buttons">
+                    <a href="{% url 'accept_application' app.id %}" class="accept-btn">Accept</a>
+                    <a href="{% url 'reject_application' app.id %}" class="reject-btn">Reject</a>
+                </div>
+
+
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="23" style="text-align:center;">No applications submitted yet.</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+    /* ===============================
+        DOCUMENT VIEW MODAL
+    =============================== */
+    const docModal = document.createElement("div");
+    docModal.className = "modal";
+    docModal.innerHTML = `
+        <div class="modal-content">
+        <img src="" alt="Document" id="modal-img">
+        <div class="close-btn">Close</div>
+        </div>
+    `;
+    document.body.appendChild(docModal);
+
+    const modalImg = docModal.querySelector("#modal-img");
+    const closeDocBtn = docModal.querySelector(".close-btn");
+
+    // Open document modal
+    document.addEventListener("click", (e) => {
+        const viewLink = e.target.closest(".view-doc");
+        if (!viewLink) return;
+
+        e.preventDefault();
+        const imgSrc = viewLink.getAttribute("data-img");
+        if (!imgSrc) return;
+
+        modalImg.src = imgSrc;
+        docModal.classList.add("show");
+    });
+
+    // Close document modal
+    closeDocBtn.addEventListener("click", () => {
+        docModal.classList.remove("show");
+    });
+
+    docModal.addEventListener("click", (e) => {
+        if (e.target === docModal) {
+        docModal.classList.remove("show");
+        }
+    });
+
+
+    /* ===============================
+        REJECT REASON MODAL
+    =============================== */
+    const rejectModal = document.createElement("div");
+    rejectModal.className = "modal reject-modal";
+    rejectModal.innerHTML = `
+        <div class="modal-content">
+        <h3 style="margin-top:0;color:#c0392b;">Reject Application</h3>
+
+        <textarea id="reject-reason"
+            placeholder="Type reason for rejection..."
+            style="width:100%;height:120px;margin:12px 0;padding:10px;
+                border:1px solid #ccc;border-radius:6px;resize:none;">
+        </textarea>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;">
+            <button class="close-reject-btn" type="button"
+            style="padding:8px 14px;border:none;border-radius:6px;
+                    background:#ccc;color:#333;cursor:pointer;">
+            Cancel
+            </button>
+
+            <button class="send-btn" type="button"
+            style="padding:8px 14px;border:none;border-radius:6px;
+                    background:#0a6847;color:#fff;cursor:pointer;">
+            Send
+            </button>
+        </div>
+        </div>
+    `;
+    document.body.appendChild(rejectModal);
+
+    const closeRejectBtn = rejectModal.querySelector(".close-reject-btn");
+    const sendBtn = rejectModal.querySelector(".send-btn");
+    const reasonInput = rejectModal.querySelector("#reject-reason");
+
+    // Open reject modal
+    document.addEventListener("click", (e) => {
+        const rejectBtn = e.target.closest(".reject-btn");
+        if (!rejectBtn) return;
+
+        rejectModal.classList.add("show");
+        reasonInput.value = "";
+        rejectModal.dataset.rowIndex = rejectBtn.closest("tr")?.rowIndex || "";
+    });
+
+    // Close reject modal
+    closeRejectBtn.addEventListener("click", () => {
+        rejectModal.classList.remove("show");
+    });
+
+    rejectModal.addEventListener("click", (e) => {
+        if (e.target === rejectModal) {
+        rejectModal.classList.remove("show");
+        }
+    });
+
+    // Send rejection
+    sendBtn.addEventListener("click", () => {
+        const reason = reasonInput.value.trim();
+        if (!reason) {
+        alert("Please enter a reason before sending.");
+        return;
+        }
+
+        const rowIndex = rejectModal.dataset.rowIndex;
+        alert(`Rejection reason sent${rowIndex ? " for row " + rowIndex : ""}:\n\n${reason}`);
+
+        // TODO: send to backend (fetch / AJAX)
+        rejectModal.classList.remove("show");
+    });
+
+
+    /* ===============================
+        ACCEPT APPLICATION
+    =============================== */
+    document.addEventListener("click", (e) => {
+        const acceptBtn = e.target.closest(".accept-btn");
+        if (!acceptBtn) return;
+
+        const row = acceptBtn.closest("tr");
+        if (!row) return;
+
+        const surname = row.children[3]?.textContent || "";
+        const firstname = row.children[4]?.textContent || "";
+
+        alert(`Accepted: ${firstname} ${surname}`);
+
+        // Optional UI feedback
+        row.style.opacity = "0.6";
+
+        // TODO: send accept action to backend
+    });
+
+    });
+</script>
+
+</body>
+</html>

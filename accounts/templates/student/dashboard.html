@@ -28,7 +28,7 @@
     <nav class="box-menu">
       <ul>
         <li><a href="{% url 'student_dashboard' %}">Dashboard</a></li>
-        <li><a href="">Documents</a></li>
+        <li><a href="{% url 'user_documents' %}">Documents</a></li>
                 <li><a href="{% url 'student_settings' %}">Settings</a></li>
       </ul>
     </nav>
@@ -78,8 +78,8 @@
           <div class="nested nested-a">
 <div class="profile-layout">
   <div class="photo-box">
-    {% if profile.profile_images and profile.profile_images.url %}
-     <img src="{{ profile.profile_images.url }}" alt="Student Photo" class="profile-pic" />
+    {% if profile.profile_image %}
+     <img src="{{ profile.profile_image.url }}" alt="Student Photo" class="profile-pic" />
     {% else %}
     <img src="{% static 'assets/default-profile.png' %}" alt="Default Photo" class="profile-pic" />
     {% endif %}
@@ -124,7 +124,7 @@
   updateWeatherWidget();
   setInterval(updateWeatherWidget, 60000);
 </script>
-        </div>
+      </div>
 
 
 
@@ -154,42 +154,55 @@
 <div class="div4">
   <div id="status" class="box active">
   {% if applications %}
+  {% for app in applications %}
     <div class="status-box">
-      <h3>Your Scholarship Applications</h3>
-      <ul>
-        {% for app in applications %}
-          <li>
-            Semester: {{ app.semester }} |
-            Status: {{ app.status }} |
-            Submitted At: {{ app.submitted_at|date:"M d, Y" }}
-          </li>
-        {% endfor %}
-      </ul>
+      <h3 style="font-size: 30px; color: #0a6847;">Your Scholarship Application</h3> 
+      <h3 style="font-size: 30px; color: #ff3300ff;"> Status: {{ app.status }}</h3>
     </div>
+    {% endfor %}
   {% else %}
     <div class="status-box">
       <a href="{% url 'apply_scholarship' %}" class="apply-btn">Start Application</a>
     </div>
-
     <div class="status-box">
       <p style="font-family: 15px;">You have not applied to a scholarship yet. <br>It is best to apply now.</p>
     </div>
   {% endif %}
 </div>
+  {% if renewal_pending %}
+  {% for renewal in renewals %}
+    <div id="renewal" class="box">
+      <h3 style="font-size: 30px; color: #0a6847;"> Your Renewal Application. </h3> <br>
+      <h3 style="font-size: 30px; color: #ff3300ff;"> Sem:{{ renewal.semester }}, Status: {{ renewal.status }}</h3>
+    </div>
+  {% endfor %}
+  {% elif has_approved %}
+    <div id="renewal" class="box">
+      <a href="{% url 'apply_renewal' %}" class="apply-btn">Renewal Application</a>
+    </div>
+  {% else %}
+    <div id="renewal" class="box">
+      <h3 style="font-size: 30px; color: #0a6847;"> Renewal instructions and deadlines will appear here.</h3>
+    </div>
+  {% endif %}
+
+  {% for app in applications %}
 
 
-  <div id="renewal" class="box">
-    <p>Renewal instructions and deadlines will appear here.</p>
-  </div>
   <div id="notifications" class="box">
-    <p>You have 3 unread messages.</p>
+    <h3 style="font-size: 30px; color: #0a6847;"> No new notifications at the moment. </h3>
   </div>
+
+
+
+  
   <div id="updates" class="box">
-    <p>Latest scholarship updates will be shown here.</p>
+    <h3 style="font-size: 30px; color: #0a6847;">Latest scholarship updates will be shown here.</h3>
   </div>
   <div id="history" class="box">
-    <p>Past applications and awards are listed here.</p>
+    <h3 style="font-size: 30px; color: #0a6847;">Past applications and awards are listed here.</h3>
   </div>
+  {% endfor %}
 </div>
 
 <script>
@@ -321,12 +334,14 @@
   <div class="box left-box">
     <h4>REQUIREMENT BOARD</h4>
     <div class="requirements-list">
-      <div class="requirement-card">Proof of Identity</div>
-      <div class="requirement-card">Birth Certificate</div>
-      <div class="requirement-card">Transcript of Records</div>
-      <div class="requirement-card">Enrollment Certificate</div>
-      <div class="requirement-card">Good Moral</div>
-      <div class="requirement-card">Scholarship Essay</div>
+      {% for app in applications %}
+      <div class="requirement-card" style="text-decoration: none;"><a href="{{ app.enrollment_certificate.url }}">Proof of Identity</a></div>
+      <div class="requirement-card" style="text-decoration: none;"><a href="{{ app.birth_certificate.url }}">Birth Certificate</a></div>
+      <div class="requirement-card" style="text-decoration: none;"><a href="{{ app.transcript_of_records.url }}">Transcript of Records</a></div>
+      <div class="requirement-card" style="text-decoration: none;"><a href="{{ app.enrollment_certificate.url }}">Enrollment Certificate</a></div>
+      <div class="requirement-card" style="text-decoration: none;"><a href="{{ app.good_moral.url }}">Good Moral</a></div>
+      <div class="requirement-card" style="text-decoration: none;"><a href="{{ app.scholarship_essay.url }}">Scholarship Essay</a></div>
+      {% endfor %}
     </div>
   </div>
 

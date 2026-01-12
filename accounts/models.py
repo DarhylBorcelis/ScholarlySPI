@@ -20,19 +20,10 @@ def report_card_upload(instance, filename): return scholarship_upload_path(insta
 def enrollment_cert_upload(instance, filename): return scholarship_upload_path(instance, filename, 'enrollment_cert') 
 def good_moral_upload(instance, filename): return scholarship_upload_path(instance, filename, 'good_moral') 
 def id_photo_upload(instance, filename): return scholarship_upload_path(instance, filename, 'id_photo')
-# Scholarship Application and Renewal Models
-def scholarship_upload_path(instance, filename, doc_type='other'):
-    return f"scholarship_docs/{instance.student.username}/{doc_type}/{filename}"
 def proof_identity_upload(instance, filename):
     return scholarship_upload_path(instance, filename, 'proof_identity')
-def birth_certificate_upload(instance, filename):
-    return scholarship_upload_path(instance, filename, 'birth_certificate')
 def transcript_records_upload(instance, filename):
     return scholarship_upload_path(instance, filename, 'transcript_records')
-def enrollment_cert_upload(instance, filename):
-    return scholarship_upload_path(instance, filename, 'enrollment_certificate')
-def good_moral_upload(instance, filename):
-    return scholarship_upload_path(instance, filename, 'good_moral')
 def scholarship_essay_upload(instance, filename):
     return scholarship_upload_path(instance, filename, 'scholarship_essay')
 
@@ -59,7 +50,6 @@ class ScholarshipApplication(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # Student Info
-    student_number = models.CharField(max_length=20)
     previous_school = models.CharField(max_length=100)
     school_year = models.CharField(max_length=20)
     surname = models.CharField(max_length=50)

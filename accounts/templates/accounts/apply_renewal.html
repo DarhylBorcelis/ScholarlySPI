@@ -1,45 +1,216 @@
-<h2>Apply for Scholarship Renewal</h2>
+<!DOCTYPE html>
+<html lang="en">
 
-<p>
-    Scholarship Status:
-    <strong>{{ scholarship.status }}</strong>
-</p>
+<head>
+  <meta charset="UTF-8">
+  <title>Application Form</title>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href=  "{% static 'css/user_sideCSS/applicationForm.css' %}">
+</head>
 
-    <label>Semester</label><br>
-        <select name="semester" required>
-            <option value="">-- Select Semester --</option>
-            <option value="1st Semester">1st Semester</option>
-            <option value="2nd Semester">2nd Semester</option>
-            <option value="3rd Semester">3rd Semester</option>
-            <option value="4th Semester">4th Semester</option>
-        </select>
-    <br><br>
+<body>
 
-    <label>Current GPA</label><br>
-    <input type="number" name="gpa" step="0.01" min="1.00" max="5.00" required>
-    <br><br>
+  <div class="page">
 
-    <!-- Documents -->
-    <label>Birth Certificate</label><br>
-    <input type="file" name="birth_certificate" required><br><br>
-    
-    <label>Report Card</label><br>
-    <input type="file" name="report_card" required><br><br>
-    
-    <label>Certificate of Enrollment</label><br>
-    <input type="file" name="enrollment_cert" required><br><br>
-    
-    <label>Good Moral Certificate</label><br>
-    <input type="file" name="good_moral" required><br><br>
-    
-    <label>ID Photo</label><br>
-    <input type="file" name="id_photo" required><br><br>
+    <!-- BACKGROUND LAYER -->
+    <div class="bg-layer"></div>
 
-    <button type="submit">Submit Renewal</button>
-</form>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-<br>
-<a href="{% url 'student_dashboard' %}">Back to Dashboard</a>
+      <!-- Logo picture -->
+      <div class="profile-pic-container">
+        <img src="{% static 'assets/main-logo.png' %}" alt="Student Photo" class="profile-pic" />
+      </div>
+
+      <!-- Box 1: Menus -->
+      <div class="sidebar-box box1">
+        <nav class="box-menu">
+          <ul>
+            <li><a href="{% url 'student_dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'user_documents' %}">Documents</a></li>
+            <li><a href="{% url 'student_settings' %}">Settings</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Box 2: Placeholder for future plans -->
+      <div class="sidebar-box box2">
+        <div class="box2-image">
+          <img src="{% static 'assets/tele.png' %}" alt="School Logo" />
+        </div>
+
+        <h4>Have Questions?</h4>
+        <ul class="assistance-info">
+          <li><i class="fas fa-globe"></i> <a href="https://www.schoolwebsite.edu" target="_blank">spi.edu.ph</a></li>
+          <li><i class="fas fa-phone"></i> 02 12365678</li>
+          <li><i class="fas fa-mobile-alt"></i> 63 912 355 6789</li>
+        </ul>
+      </div>
+
+      <div class="box3">
+        <ul class="logout-menu">
+          <a href="{% url 'logout' %}">Logout</a>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- MAIN FLOATING CONTENT -->
+    <div class="app-container">
+      <div class="two-columns">
+        <div class="column left">
+          <h2 class="form-heading"> Renewal Form</h2>
+          <p class="form-subheading">Please fill out all required fields accurately before submitting.</p>
+
+        <form method="post" enctype="multipart/form-data" class="responsive-form">
+            {% csrf_token %}
+            <!-- First row: Student ID + Previous School -->
+            <div class="frm_first frm_third">
+                <label>Student ID</label>
+                <input type="text" value="{{ profile.student_id }}" disabled>
+                </div>
+
+                <div class="frm_third">
+                <label>Previous School</label>
+                <input type="text" value="{{ scholarships.previous_school }}" disabled>
+                </div>
+
+                <div class="frm_third">
+                <label>School Year</label>
+                <input type="text" value="{{ scholarships.school_year }}" disabled>
+                </div>
+
+                <div class="frm_first frm_fourth">
+                <label>Surname</label>
+                <input type="text" value="{{ scholarships.surname }}" disabled>
+                </div>
+
+                <div class="frm_fourth">
+                <label>First Name</label>
+                <input type="text" value="{{ scholarships.firstname }}" disabled>
+                </div>
+
+                <div class="frm_fourth">
+                <label>Middle Name</label>
+                <input type="text" value="{{ scholarships.middlename }}" disabled>
+                </div>
+
+                <div class="frm_first">
+                <label>Sex</label>
+                <input type="text" value="{{ scholarships.sex }}" disabled>
+                </div>
+
+                <div class="frm_first">
+                <label>Age</label>
+                <input type="number" value="{{ scholarships.age }}" disabled>
+                </div>
+
+
+            <div class=" frm_fourth frm_fourth">
+              <label>Street Info.</label>
+              <input type="text" name="street_no" value="{{ scholarships.street_no }}" disabled>
+            </div>
+
+            <div class="frm_fourth">
+              <label>City / Municipality</label>
+              <input type="text" name="city" value="{{ scholarships.city }}" disabled>
+            </div>
+
+            <div class="frm_fourth">
+              <label>Province</label>
+              <input type="text" name="province" value="{{ scholarships.province}}" disabled>
+            </div>
+
+
+
+
+
+            <!-- Contact numbers -->
+            <div class="frm_first frm_third">
+              <label>Cellphone No.</label>
+              <input type="tel" name="cellphone" pattern="[0-9]{11}" value="{{ scholarships.cellphone }}" disabled>
+            </div>
+
+
+
+
+
+            <!-- Semester + Submit -->
+            <div class="frm_first">
+              <label>Semester</label>
+              <select name="semester" required>
+                <option value="">Select</option>
+                <option>1st</option>
+                <option>2nd</option>
+              </select>
+            </div>
+
+            <div class="frm_two_thirds">
+              <label>Strand / Course</label>
+              <input type="text" name="strand_course" value="{{ scholarships.strand_course }}" disabled>
+            </div>
+
+            <div class="frm_first frm_third">
+              <label>Renewal Date</label>
+              <input type="date" name="application_date" required>
+            </div>
+
+
+
+            </div>
+            <div class="column right">
+            <h2 class="form-heading"> Document Uploads</h2>
+            <p class="form-subheading">Upload all required files before submitting your application.</p>
+
+
+            <div class="upload-card">
+                <label>
+                    Birth Certificate
+                    <input type="file" name="birth_certificate" required>
+                </label>
+                
+            </div>
+
+            <div class="upload-card">
+                <label>Report Card
+                    <input type="file" name="report_card" required>
+                </label>
+                
+            </div>
+
+            <div class="upload-card">
+                <label>Enrollment Certificate
+                    <input type="file" name="enrollment_cert" required>
+                </label>
+                
+            </div>
+
+            <!-- Good Moral -->
+            <div class="upload-card">
+                <label>Good Moral Certificate
+                    <input type="file" name="good_moral" required>
+                </label>
+                
+            </div>
+
+            <!-- ID Photo -->
+            <div class="upload-card">
+                <label>ID Photo
+                    <input type="file" name="id_photo" required>
+                </label>
+                
+            </div>
+
+            <button type="submit" class="apply-btn">Submit Application</button>
+        </form>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+</html>

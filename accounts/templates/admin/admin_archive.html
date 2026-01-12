@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Layered Dashboard - Users</title>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/admin_sideCSS/adminArchive.css' %}">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- BACKGROUND LAYER -->
+  <div class="bg-layer"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="profile-pic-container">
+      <img src="{% static 'assets/main-logo.png' %}" alt="Student Photo" class="profile-pic" />
+    </div>
+
+    <div class="sidebar-box box1">
+      <nav class="box-menu">
+        <ul>
+          <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+          <li><a href="{% url 'admin_applications' %}">Applications</a></li>
+          <li><a href="{% url 'admin_renewals' %}">Renewals</a></li>
+          <li><a href="{% url 'admin_user' %}">Users</a></li>
+          <li><a href="{% url 'admin_archive' %}">Archive</a></li>
+
+        </ul>
+      </nav>
+    </div>
+
+    <div class="sidebar-box box2">
+      <div class="box2-image">
+        <img src="{% static 'assets/tele.png' %}" alt="School Logo" />
+      </div>
+      <h4>Have Questions?</h4>
+      <ul class="assistance-info">
+        <li><i class="fas fa-globe"></i> <a href="https://www.schoolwebsite.edu" target="_blank">spi.edu.ph</a></li>
+        <li><i class="fas fa-phone"></i>  02 12365678</li>
+        <li><i class="fas fa-mobile-alt"></i> 63 912 355 6789</li>
+      </ul>
+    </div>
+
+    <div class="box3">
+      <ul class="logout-menu">
+        <a href="{% url 'logout' %}">Logout</a>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN FLOATING CONTENT -->
+  <div class="app">
+    <div class="parent">
+
+      <!-- Header -->
+      <div class="div1">
+        <div class="boxA">
+          <h2 class="page-heading">Scholarship Archive</h2>
+          <p class="page-subheading">View and manage approved Scholarships here</p>
+        </div>
+        <div class="boxB">
+          <input type="text" class="search-input" placeholder="Search by School ID, name, or email...">
+          <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+<div class="div2">
+  <table class="student-table" style="font-size: 20px">
+  <thead>
+    <tr>
+      <th>Type</th> <!-- Application or Renewal -->
+      <th>Student Name</th>
+      <th>Course / Strand</th>
+      <th>Year Level</th>
+      <th>Semester</th>
+      <th>Submission Date</th>
+      <th>Proof Identity</th>
+      <th>Birth Certificate</th>
+      <th>Transcript / Report Card</th>
+      <th>Enrollment Certificate</th>
+      <th>Good Moral</th>
+      <th>Scholarship Essay / ID Photo</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Applications -->
+    {% for app in applications %}
+    <tr>
+      <td>Application</td>
+      <td>{{ app.student.username }}</td>
+      <td>{{ app.strand_course }}</td>
+      <td>{{ app.student.studentprofile.year_level }}</td>
+      <td>{{ app.semester }}</td>
+      <td>{{ app.submitted_at|date:"M d, Y" }}</td>
+      <td>{% if app.proof_identity %}<a href="{{ app.proof_identity.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{% if app.birth_certificate %}<a href="{{ app.birth_certificate.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{% if app.transcript_records %}<a href="{{ app.transcript_records.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{% if app.enrollment_certificate %}<a href="{{ app.enrollment_certificate.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{% if app.good_moral %}<a href="{{ app.good_moral.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{% if app.scholarship_essay %}<a href="{{ app.scholarship_essay.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{{ app.status }}</td>
+    </tr>
+    {% endfor %}
+
+    <!-- Renewals -->
+    {% for renewal in renewals %}
+    <tr>
+      <td>Renewal</td>
+      <td>{{ renewal.student.username }}</td>
+      <td>{{ renewal.scholarship.strand_course }}</td>
+      <td>{{ renewal.student.studentprofile.year_level }}</td>
+      <td>{{ renewal.semester }}</td>
+      <td>{{ renewal.submitted_at|date:"M d, Y" }}</td>
+      <td>{% if renewal.id_photo %}<a href="{{ renewal.id_photo.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{% if renewal.birth_certificate %}<a href="{{ renewal.birth_certificate.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{% if renewal.report_card %}<a href="{{ renewal.report_card.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{% if renewal.enrollment_cert %}<a href="{{ renewal.enrollment_cert.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>{% if renewal.good_moral %}<a href="{{ renewal.good_moral.url }}" target="_blank">View</a>{% endif %}</td>
+      <td>N/A</td>
+      <td>{{ renewal.status }}</td>
+    </tr>
+    {% endfor %}
+
+    {% if applications|length == 0 and renewals|length == 0 %}
+    <tr>
+      <td colspan="13" style="text-align:center;">No archived applications or renewals yet.</td>
+    </tr>
+    {% endif %}
+  </tbody>
+</table>
+
+    </div>
+    </div>
+</body>
+</html>

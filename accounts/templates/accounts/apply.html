@@ -31,7 +31,7 @@
         <nav class="box-menu">
           <ul>
             <li><a href="{% url 'student_dashboard' %}">Dashboard</a></li>
-            <li><a href="">Documents</a></li>
+            <li><a href="{% url 'user_documents' %}">Documents</a></li>
             <li><a href="{% url 'student_settings' %}">Settings</a></li>
           </ul>
         </nav>
@@ -66,12 +66,12 @@
           <h2 class="form-heading"> Application Form</h2>
           <p class="form-subheading">Please fill out all required fields accurately before submitting.</p>
 
-        <form method="post" class="responsive-form">
+        <form method="post" enctype="multipart/form-data" class="responsive-form">
             {% csrf_token %}
-            <!-- First row: Student Number + Previous School -->
+            <!-- First row: Student ID + Previous School -->
             <div class="frm_first frm_third">
-              <label>Student Number</label>
-              <input type="text" name="student_number" required>
+              <label>Student ID</label>
+              <input type="text" name="student_id" value="{{ profile.student_id }}" required>
             </div>
 
             <div class="frm_third">
@@ -174,33 +174,33 @@
 
             <div class="upload-card">
               <label for="proof_identity">Proof of Identity</label>
-              <input type="file" id="proof_identity" name="proof_identity" accept="image/*,.pdf" required>
+              <input type="file" id="proof_identity" name="proof_identity"required>
             </div>
 
             <div class="upload-card">
               <label for="birth_certificate">Birth Certificate</label>
-              <input type="file" id="birth_certificate" name="birth_certificate" accept="image/*,.pdf" required>
+              <input type="file" id="birth_certificate" name="birth_certificate" required>
             </div>
 
             <div class="upload-card">
               <label for="transcript_records">Transcript of Records</label>
-              <input type="file" id="transcript_records" name="transcript_records" accept="image/*,.pdf" required>
+              <input type="file" id="transcript_records" name="transcript_records"  required>
             </div>
 
             <div class="upload-card">
               <label for="enrollment_certificate">Enrollment Certificate / Form</label>
-              <input type="file" id="enrollment_certificate" name="enrollment_certificate" accept="image/*,.pdf"
+              <input type="file" id="enrollment_certificate" name="enrollment_certificate"
                 required>
             </div>
 
             <div class="upload-card">
               <label for="good_moral">Good Moral Certificate</label>
-              <input type="file" id="good_moral" name="good_moral" accept="image/*,.pdf" required>
+              <input type="file" id="good_moral" name="good_moral"  required>
             </div>
 
             <div class="upload-card">
               <label for="scholarship_essay">Scholarship Essay</label>
-              <input type="file" id="scholarship_essay" name="scholarship_essay" accept="image/*,.pdf" required>
+              <input type="file" id="scholarship_essay" name="scholarship_essay"  required>
             </div>
 
             <button type="submit" class="apply-btn">Submit Application</button>

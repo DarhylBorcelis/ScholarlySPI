@@ -99,41 +99,69 @@
           <div class="recents-header">
             <h2>Recents</h2>
           </div>
-          {% for app in application %}
+          {% for app in applications %}
           <div class="row-box rowB">
+
+            <!-- Enrollment Certificate -->
             <div class="gray-box g1">
               <i class="fas fa-file-alt"></i>
-              <div   class="file-info">
-                <h4><a href="{{ app.enrollment_certificate.url }}" target="_blank">Enrollment Form</a></h4>
-                <span>Added Jan 7</span>
+              <div class="file-info">
+                <h4>
+                  {% if app.enrollment_certificate %}
+                    <a href="{{ app.enrollment_certificate.url }}" target="_blank">Enrollment Form</a>
+                  {% else %}
+                    Enrollment Form (Not uploaded)
+                  {% endif %}
+                </h4>
               </div>
             </div>
 
+            <!-- Scholarship Essay -->
             <div class="gray-box g2">
               <i class="fas fa-file-signature"></i>
               <div class="file-info">
-                <h4><a href="{{ app.scholarship_letter.url }}" target="_blank">Scholarship Letter</a></h4>
-                <span>Added Jan 6</span>
+                <h4>
+                  {% if app.scholarship_essay %}
+                    <a href="{{ app.scholarship_essay.url }}" target="_blank">Scholarship Letter</a>
+                  {% else %}
+                    Scholarship Letter (Not uploaded)
+                  {% endif %}
+                </h4>
               </div>
             </div>
 
-            <div class="gray-box g3">
-              <i class="fas fa-file-pdf"></i>
-              <div class="file-info">
-                <h4><a href="{{ app.transcript_of_records.url }}" target="_blank">Transcript of Records</a></h4>
-                <span>Added Jan 5</span>
-              </div>
+          <!-- Transcript of Records -->
+          <div class="gray-box g3">
+            <i class="fas fa-file-pdf"></i>
+            <div class="file-info">
+              <h4>
+                {% if app.transcript_records %}
+                  <a href="{{ app.transcript_records.url }}" target="_blank">Transcript of Records</a>
+                {% else %}
+                  Transcript of Records (Not uploaded)
+                {% endif %}
+              </h4>
             </div>
-
-            <div class="gray-box g4">
-              <i class="fas fa-file-word"></i>
-              <div class="file-info">
-                <h4><a href="{{ app.recommendation_letter.url }}" target="_blank">Recommendation Letter</a></h4>
-                <span>Added Jan 2</span>
-              </div>
-            </div>
-            {% endfor %}
           </div>
+
+          <!-- Good Moral -->
+          <div class="gray-box g4">
+            <i class="fas fa-file-word"></i>
+            <div class="file-info">
+              <h4>
+                {% if app.good_moral %}
+                  <a href="{{ app.good_moral.url }}" target="_blank">Good Moral Certificate</a>
+                {% else %}
+                  Good Moral Certificate (Not uploaded)
+                {% endif %}
+              </h4>
+            </div>
+          </div>
+
+        </div>
+        {% endfor %}
+
+
         </div>
         <div class="div3">
           <div class="recents-header">
