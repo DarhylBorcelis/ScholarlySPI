@@ -83,6 +83,10 @@
             </div>
           </div>
         </div>
+
+
+
+
         <div class="div2">
           <div class="row-box rowA">
             <!-- A1: Heading -->
@@ -95,11 +99,9 @@
             <!-- A2: Upload button -->
 
           </div>
-
           <div class="recents-header">
             <h2>Recents</h2>
           </div>
-          {% for app in applications %}
           <div class="row-box rowB">
 
             <!-- Enrollment Certificate -->
@@ -107,7 +109,7 @@
               <i class="fas fa-file-alt"></i>
               <div class="file-info">
                 <h4>
-                  {% if app.enrollment_certificate %}
+                  {% if app.enrollment_certificate.url %}
                     <a href="{{ app.enrollment_certificate.url }}" target="_blank">Enrollment Form</a>
                   {% else %}
                     Enrollment Form (Not uploaded)
@@ -157,12 +159,14 @@
               </h4>
             </div>
           </div>
-
         </div>
-        {% endfor %}
-
-
         </div>
+
+
+
+
+
+
         <div class="div3">
           <div class="recents-header">
             <h2>My Files</h2>
@@ -171,45 +175,118 @@
           <table class="asset-table">
             <thead>
               <tr>
-                <th>Asset Name</th>
-                <th>Tag</th>
-                <th>Created</th>
+                <th>Document Name</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Uploaded</th>
                 <th>Owner</th>
-                <th>Last Modified</th>
               </tr>
             </thead>
             <tbody>
+
+              {% if app %}
+
+              <!-- Enrollment Certificate -->
               <tr>
-                <td>Enrollment Form</td>
+                <td>
+                  {% if app.enrollment_certificate %}
+                    <a href="{{ app.enrollment_certificate.url }}" target="_blank">
+                      Enrollment Certificate
+                    </a>
+                  {% else %}
+                    Enrollment Certificate
+                  {% endif %}
+                </td>
                 <td><span class="tag tag-form">Form</span></td>
-                <td>Jan 7</td>
-                <td>Al</td>
-                <td>Jan 7</td>
+                <td>
+                  <span class="badge {{ app.status|lower }}">
+                    {{ app.status }}
+                  </span>
+                </td>
+                <td>{{ app.submitted_at|date:"M d, Y" }}</td>
+                <td>{{ request.user.first_name }}</td>
               </tr>
+
+              <!-- Scholarship Essay -->
               <tr>
-                <td>Scholarship Letter</td>
+                <td>
+                  {% if app.scholarship_essay %}
+                    <a href="{{ app.scholarship_essay.url }}" target="_blank">
+                      Scholarship Letter
+                    </a>
+                  {% else %}
+                    Scholarship Letter
+                  {% endif %}
+                </td>
                 <td><span class="tag tag-letter">Letter</span></td>
-                <td>Jan 6</td>
-                <td>Al</td>
-                <td>Jan 6</td>
+                <td>
+                  <span class="badge {{ app.status|lower }}">
+                    {{ app.status }}
+                  </span>
+                </td>
+                <td>{{ app.submitted_at|date:"M d, Y" }}</td>
+                <td>{{ request.user.first_name }}</td>
               </tr>
+
+              <!-- Transcript -->
               <tr>
-                <td>Transcript of Records</td>
+                <td>
+                  {% if app.transcript_records %}
+                    <a href="{{ app.transcript_records.url }}" target="_blank">
+                      Transcript of Records
+                    </a>
+                  {% else %}
+                    Transcript of Records
+                  {% endif %}
+                </td>
                 <td><span class="tag tag-doc">Document</span></td>
-                <td>Jan 5</td>
-                <td>Al</td>
-                <td>Jan 5</td>
+                <td>
+                  <span class="badge {{ app.status|lower }}">
+                    {{ app.status }}
+                  </span>
+                </td>
+                <td>{{ app.submitted_at|date:"M d, Y" }}</td>
+                <td>{{ request.user.first_name }}</td>
               </tr>
+
+              <!-- Good Moral -->
               <tr>
-                <td>Recommendation Letter</td>
-                <td><span class="tag tag-letter">Letter</span></td>
-                <td>Jan 2</td>
-                <td>Al</td>
-                <td>Jan 2</td>
+                <td>
+                  {% if app.good_moral %}
+                    <a href="{{ app.good_moral.url }}" target="_blank">
+                      Good Moral Certificate
+                    </a>
+                  {% else %}
+                    Good Moral Certificate
+                  {% endif %}
+                </td>
+                <td><span class="tag tag-doc">Document</span></td>
+                <td>
+                  <span class="badge {{ app.status|lower }}">
+                    {{ app.status }}
+                  </span>
+                </td>
+                <td>{{ app.submitted_at|date:"M d, Y" }}</td>
+                <td>{{ request.user.first_name }}</td>
               </tr>
+
+              {% else %}
+              <tr>
+                <td colspan="5" style="text-align:center;">
+                  No documents uploaded yet.
+                </td>
+              </tr>
+              {% endif %}
+
             </tbody>
           </table>
         </div>
+
+
+
+
+
+
         <div class="div4">
           <div class="vbox v1">
             <div class="table-header">
@@ -297,7 +374,6 @@
 
         </div>
       </div>
-
     </div>
 
 </body>

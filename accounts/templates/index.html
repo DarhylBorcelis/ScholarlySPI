@@ -1,259 +1,905 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarship Portal | Global Education Fund</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        :root {
-            --primary-blue: #0c4a6e;
-            --accent-gold: #eab308;
-            --light-bg: #f8fafc;
-            --text-dark: #1e293b;
-        }
+  <title>ScholarlySPI – Streamline Scholarship Applications</title>
+  {% load static %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
 
-        body {
-            background-color: var(--light-bg);
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
+    /* * {
+    outline: 1px solid red;
+    } */
 
-        /* Navigation */
-        nav {
-            background: white;
-            padding: 20px 10%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+    @font-face {
+    font-family: 'regular';
+    src: url('../fonts/regular.ttf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    }
 
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--primary-blue);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    @font-face {
+        font-family: 'FontspringDEMO'  !important;
+        src: url('../fonts/Fontspring-DEMO-tt_commons_pro_regular.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+    }
 
-        .nav-links a {
-            margin-left: 25px;
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
+    @font-face {
+        font-family: 'FontspringDEMO_black'  !important;
+        src: url('../fonts/Fontspring-DEMO-tt_commons_pro_bold.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'stam'  !important;
+        src: url('../fonts/Stam.ttf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+    }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(12, 74, 110, 0.9), rgba(12, 74, 110, 0.9)), 
-                        url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 100px 10%;
-            text-align: center;
-        }
+    
 
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'FontspringDEMO'; }
 
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            opacity: 0.9;
-        }
+    body {
+      background: #0c2011;
+      color: #ecfdf5;
+      line-height: 1.6;
+    }
 
-        .cta-group {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
+    /* Navbar */
+    .navbar {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 64px);
+    max-width: 1200px;
+    padding: 14px 28px;
+    border-radius: 16px;
+    background: rgba(16, 25, 19, 0.7); /* semi-transparent */
+    outline: 1px solid rgba(41, 46, 41, 0.6); /* thin outline */
+    backdrop-filter: blur(14px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    }
+    .logo { font-weight: 700; font-size: 2rem; color: #ffffff; font-family: 'Courier New', Courier, monospace; }
+    .nav-links a {
+      margin-left: 24px;
+      text-decoration: none;
+      color: #d1fae5;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: #ffffff; }
 
-        .btn {
-            padding: 15px 35px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-        }
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      align-items: center;
+      padding: 120px 24px 80px;
+      max-width: 1200px;
+      margin: auto;
+      position: relative;
+    }
+    .hero-text h1 {
+      font-size: clamp(2.9rem, 6vw, 3.9rem);
+      font-weight: 200;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      font-family: 'stam'  !important;
+      color: #ecfdf5;
+    }
+    .hero-text h1 span { color: #10b981;       font-family: 'stam';
+    } /* highlight 'Journey' */
+    .hero-text p { font-size: 1.05rem; color: #bbf7d0; margin-bottom: 32px; max-width: 480px; }
+    .hero-text .cta-group a {
+      display: inline-block;
+      padding: 14px 36px;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-right: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-primary {
+      background: linear-gradient(135deg, #0a6847, #0f9d6a);
+      color: #ecfdf5;
+    }
+    .cta-secondary {
+      border: 1px solid #10b981;
+      color: #10b981;
+      background: transparent;
+    }
+    .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(10,104,71,0.45); }
+    .cta-secondary:hover { transform: translateY(-2px); background: rgba(16,185,129,0.1); }
 
-        .btn-primary {
-            background-color: var(--accent-gold);
-            color: var(--primary-blue);
-        }
+    .hero-images {
+      display: grid;
+      grid-template-columns:1fr;
+      gap: 16px;
+      position: relative;
+    }
+    .hero-images img {
+      width: 100%;
+      border-radius: 20px;
+      object-fit: cover;
+    }
+    .hero-images .label {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(16,185,129,0.9);
+      color: #ecfdf5;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      border-radius: 999px;
+    }
 
-        .btn-secondary {
-            border: 2px solid white;
-            color: white;
-        }
+    /* Stats box */
+    .stats {
+      position: absolute;
+      bottom: -16px;
+      right: 0;
+      background: rgba(0,0,0,0.5);
+      border-radius: 16px;
+      padding: 24px;
+      color: #bbf7d0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 180px;
+      font-size: 0.9rem;
+    }
+    .stats div span { font-weight: 700; color: #10b981; }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
+    /* Sections */
+    section {
+      padding: 100px 24px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .section-title { text-align: center; font-size: 2rem; margin-bottom: 16px; color: #ecfdf5; }
+    .section-sub { text-align: center; max-width: 720px; margin: 0 auto 64px; color: #a7f3d0; }
 
-        /* Stats Section */
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            padding: 50px 10%;
-            background: white;
-            margin-top: -50px;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+    /* Override section restrictions for #process */
+    #process {
+    background-color: #030203; /* black background */
+    padding: 100px 24px;
+    margin: 50px 0; /* remove auto centering */
+    color: #ecfdf5;
+    max-width: 100% !important;
+    width: 100% !important;
+    }
 
-        .stat-item h2 {
-            color: var(--primary-blue);
-            font-size: 2rem;
-        }
 
-        /* Information Section */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            padding: 80px 10%;
-        }
 
-        .info-card {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            border-top: 5px solid var(--primary-blue);
-        }
+        .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 32px;
+    grid-auto-rows: minmax(180px, auto); /* ensures consistent row height scaling */
+    }
 
-        .info-card h3 {
-            margin-bottom: 15px;
-            color: var(--primary-blue);
-        }
+    .card {
+    padding: 32px;
+    border-radius: 20px;
+    background: rgba(16, 25, 19, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    transition: transform 0.25s ease;
+    }
 
-        .deadline-box {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            padding: 20px;
-            text-align: center;
-            margin: 40px 10%;
-            border-radius: 8px;
-        }
+    .card:hover {
+    transform: translateY(-6px);
+    }
 
-        .deadline-box h4 {
-            color: #dc2626;
-            font-size: 1.5rem;
-        }
+    /* Different sizes */
+    .card.large {
+    grid-column: span 2; /* makes it wider */
+    }
 
-        footer {
-            background: #0f172a;
-            color: white;
-            padding: 50px 10%;
-            text-align: center;
-        }
-    </style>
+    .card.mid {
+    grid-column: span 3;
+    }
+    .card.tall {
+    grid-row: span 2; /* makes it taller */
+    }
+    .feature-icon {
+    font-size: 2rem;
+    color: #10b981; /* green accent */
+    margin-bottom: 16px;
+    display: block;
+    }
+    .faq {
+    max-width: 800px;
+    margin: auto;
+    }
+    .faq-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    }
+    .faq-item:hover {
+    background: rgba(16,185,129,0.1);
+    }
+    .faq-item h3 {
+    margin-bottom: 8px;
+    color: #10b981;
+    }
+
+    .inst-text {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    }
+
+    .inst-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(6px);
+    transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .inst-item:hover {
+    transform: translateY(-6px);
+    background: rgba(16,185,129,0.08);
+    }
+
+    .inst-icon {
+    font-size: 2rem;
+    color: #10b981;
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border: 2px solid #10b981;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+    .inst-item h3 {
+    margin-bottom: 8px;
+    color: #ecfdf5;
+    }
+    .inst-item p {
+    color: #a7f3d0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    }
+
+    .inst-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    }
+    .inst-img img {
+    width: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+    }
+    .inst-text h3 {
+    margin-top: 20px;
+    color: #10b981;
+    }
+
+    .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    }
+    .contact-card {
+    position: relative;
+    height: 220px;
+    border-radius: 16px;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    }
+    .contact-card .overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    color: #ecfdf5;
+    }
+    .contact-card h3 {
+    margin-bottom: 8px;
+    color: #10b981;
+    }
+
+    .process-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    max-width: 1000px;
+    margin: auto;
+    }
+
+    .step {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    }
+
+    .step.reverse {
+    flex-direction: row-reverse;
+    }
+
+    .step-img img {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 16px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    }
+
+    .step-img img:hover {
+    transform: scale(1.05);
+    }
+
+    .step-content {
+    flex: 1;
+    }
+
+    .step-content h3 {
+    margin-bottom: 12px;
+    color: #10b981;
+    font-size: 1.4rem;
+    }
+
+    .step-content p {
+    margin-bottom: 16px;
+    color: #d1fae5;
+    }
+
+    .step-link {
+    text-decoration: none;
+    color: #10b981;
+    font-weight: 600;
+    transition: color 0.3s;
+    }
+
+    .step-link:hover {
+    color: #34d399;
+    }
+
+    .nav-links .login-btn {
+    padding: 8px 20px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0a6847, #0f9d6a);
+    color: #ecfdf5;
+    font-weight: 300;
+    transition: all 0.3s ease;
+    margin-left: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* space between text and arrow */
+    }
+
+    .nav-links .login-btn i {
+    transition: transform 0.3s ease;
+    }
+
+    .nav-links .login-btn:hover {
+    background: linear-gradient(135deg, #0f9d6a, #34d399);
+    box-shadow: 0 6px 20px rgba(16,185,129,0.4);
+    transform: translateY(-2px);
+    }
+
+    .nav-links .login-btn:hover i {
+    transform: translateX(4px); /* arrow slides right */
+    }
+
+    .feature-icon {
+    font-size: 1.8rem;
+    color: #10b981; /* green accent */
+    margin-bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;   /* circle size */
+    height: 60px;
+    border: 2px solid #10b981; /* circle outline */
+    border-radius: 50%;        /* makes it round */
+    transition: all 0.3s ease;
+    }
+
+    .card:hover .feature-icon {
+    background: rgba(16,185,129,0.1); /* subtle hover fill */
+    transform: scale(1.1);
+    }
+
+    .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+    }
+
+    .faq-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 28px;
+    backdrop-filter: blur(6px);
+    transition: transform 0.3s ease;
+    }
+
+    .faq-card:hover {
+    transform: translateY(-6px);
+    background: rgba(16, 185, 129, 0.08);
+    }
+
+    .faq-q {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #10b981;
+    margin-bottom: 12px;
+    }
+
+    .faq-a {
+    font-size: 0.95rem;
+    color: #d1fae5;
+    line-height: 1.5;
+    }
+        /* Footer */
+    footer {
+    padding: 24px 16px;
+    text-align: center;
+    color: #a7f3d0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    background: #030203; /* match process section */
+    }
+    .footer {
+    background: #0a0f0c;
+    color: #a7f3d0;
+    padding: 60px 24px 30px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: auto;
+    }
+
+    .footer h2 {
+    color: #10b981;
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+    }
+
+    .footer h3 {
+    color: #ecfdf5;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    }
+
+    .footer-links ul {
+    list-style: none;
+    padding: 0;
+    }
+
+    .footer-links li {
+    margin-bottom: 8px;
+    }
+
+    .footer-links a {
+    color: #a7f3d0;
+    text-decoration: none;
+    transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+    color: #10b981;
+    }
+
+    .footer-contact a {
+    color: #10b981;
+    text-decoration: none;
+    }
+
+    .social-icons a {
+    display: inline-block;
+    margin-right: 12px;
+    color: #a7f3d0;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+    color: #10b981;
+    }
+
+    .footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.85rem;
+    color: #6ee7b7;
+    }
+
+    .footer-bottom a {
+    color: #10b981;
+    text-decoration: none;
+    margin: 0 6px;
+    }
+    .footer-bottom a:hover {
+    text-decoration: underline;
+    }
+
+    .cta-section {
+    background: #0a2014;
+    padding: 100px 24px;
+    text-align: center;
+    color: #ecfdf5;
+    }
+
+    .cta-content {
+    max-width: 720px;
+    margin: auto;
+    }
+
+    .cta-content h2 {
+    font-size: 2.4rem;
+    margin-bottom: 24px;
+    font-weight: 400;
+    color: #10b981;
+    }
+
+    .cta-content p {
+    font-size: 1.05rem;
+    color: #bbf7d0;
+    margin-bottom: 32px;
+    }
+
+    .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    }
+
+    .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    }
+
+    .cta-btn.primary {
+    background: linear-gradient(135deg, #0a6847, #0f9d6a);
+    color: #ecfdf5;
+    }
+
+    .cta-btn.primary:hover {
+    background: linear-gradient(135deg, #0f9d6a, #34d399);
+    box-shadow: 0 6px 20px rgba(16,185,129,0.4);
+    transform: translateY(-2px);
+    }
+
+    .cta-btn.secondary {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #10b981;
+    color: #10b981;
+    }
+
+    .cta-btn.secondary:hover {
+    background: rgba(16,185,129,0.1);
+    transform: translateY(-2px);
+    }
+
+    .cta-note {
+    font-size: 0.1rem;
+    color: #6ee7b7;
+    }
+
+  </style>
 </head>
+
 <body>
 
-    <nav>
-        <div class="logo">ScholarPortal</div>
-        <div class="nav-links">
-            <a href="#">Requirements</a>
-            <a href="#">none</a>
-            <a href="#">contact</a>
-            {% if user %}
-                <a href="{% url 'logout' %}" style="color: var(--accent-gold);">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}" style="color: var(--accent-gold);">Login</a>
-            {% endif %}
-        </div>
-    </nav>
+<nav class="navbar">
+  <div class="logo">scholarlySPI</div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#process">Process</a>
+    <a href="#about">About</a>
+    <a href="#faq">FAQ</a>
+    
+    {% if user %}
+      <a href="{% url 'logout' %}" class="login-btn">
+        Logout <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    {% else %}
+      <a href="{% url 'login' %}" class="login-btn">
+        Register / Login <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    {% endif %}
+  </div>
+</nav>
 
-    <header class="hero">
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Your <span>Scholarship</span> Journey Starts <br> Here.</h1>
+      <p><span style="font-family:'Courier New', Courier, monospace;">scholarlySPI</span> helps SPI students discover, apply, and track scholarships in a single, seamless platform—making scholarship management faster, easier, and more transparent.</p>
+      <div class="cta-group">
         {% if user %}
-            <h2>Welcome back, {{ request.user.username }}!</h2>
-            <div class="cta-group">
-                <a href="{% url 'student_dashboard' %}" class="btn btn-primary">Dashboard</a>
-            </div>
+        <a href="{% url 'apply_scholarship' %}" class="cta-primary">Start Application</a>
         {% else %}
-            <h1>Empowering Your Academic Journey</h1>
-            <p>The 2025 International Excellence Scholarship is now accepting applications. We provide the financial support; you provide the vision.</p>
-            <div class="cta-group">
-                <a href="{% url 'register' %}" class="btn btn-primary">Register Now</a>
-            </div>
+            <a href="{% url 'login' %}" class="cta-primary">Register Now</a>
         {% endif %}
-        
-    </header>
+        <a href="#" class="cta-secondary">See How It Works</a>
+      </div>
+    </div>
+    <div class="hero-images">
+      
+      <img src="{% static "assets/all.png" %}" alt="Scholarship applications" />
 
-    <div class="stats">
-        <div class="stat-item">
-            <h2>$2.5M</h2>
-            <p>Total Funding</p>
-        </div>
-        <div class="stat-item">
-            <h2>1,200</h2>
-            <p>Scholars Awarded</p>
-        </div>
-        <div class="stat-item">
-            <h2>45+</h2>
-            <p>Partner Universities</p>
-        </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features">
+    <h2 class="section-title">
+      <span style="font-family: 'Courier New', Courier, monospace; font-size: 14px;">01 - FEATURES</span>
+    </h2>
+    <h1 class="section-sub">Everything you need to manage scholarship applications in one place.</h1>
+<div class="grid">
+  <div class="card large">
+    <i class="fa-solid fa-lightbulb feature-icon"></i>
+    <h3>Smart Renewal Process</h3> <br>
+    <p>Get tailored scholarship matches that adapt to your profile, making renewals faster and more reliable.</p>
+  </div>
+
+  <div class="card">
+    <i class="fa-solid fa-file-upload feature-icon"></i>
+    <h3>Centralized Document Uploads</h3> <br>
+    <p>Upload your documents once and reuse them across applications, saving time and reducing repetitive work.</p>
+  </div>
+
+  <div class="card tall">
+    <i class="fa-solid fa-chart-line feature-icon"></i>
+    <h3>Real Time Application Tracking</h3> <br>
+    <p>Follow your applications step by step with instant updates, so you’re always aware of progress and deadlines.</p>
+  </div>
+
+  <div class="card mid">
+    <i class="fa-solid fa-shield-halved feature-icon"></i>
+    <h3>Secure Student Dashboard</h3> <br>
+    <p>Keep all applications, documents, and results safe in one dashboard with strong privacy and easy access.</p>
+  </div>
+</div>
+  </section>
+
+
+
+
+
+
+
+  <section id="process">
+  <h2 class="section-title">
+    <span style="font-family: 'Courier New', Courier, monospace; font-size: 14px;">02 - HOW IT WORKS</span>
+  </h2>
+    <h1 class="section-sub">See how we Streamline the process</h1>
+      <p class="section-sub" style="margin-top: -60px;">A simple, clear workflow designed for students and administrators.</p>
+
+
+<div class="process-timeline">
+  <div class="step">
+    <div class="step-img">
+      <img src="{%static 'assets/id.png' %}" alt="Sign up illustration">
+    </div>
+    <div class="step-content">
+      <h3>Sign Up</h3>
+      <p>Create your student account and build a complete profile with academic history, financial background, and personal goals. This one time setup helps scholarlySPI match you with the most relevant scholarships instantly.</p>
+      <a href="#" class="step-link">Get Started →</a>
+    </div>
+  </div>
+
+  <div class="step reverse">
+    <div class="step-img">
+      <img src="{% static 'assets/list.png'%}" alt="Apply illustration">
+    </div>
+    <div class="step-content">
+      <h3>Apply to Scholarships</h3>
+      <p>Explore personalized scholarship matches and submit applications directly through scholarlySPI. With your documents already uploaded, the process is fast, organized, and tailored to your eligibility.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-img">
+      <img src="{% static 'assets/aor.png' %}" alt="Tracking illustration">
+    </div>
+    <div class="step-content">
+      <h3>Track and Receive Updates</h3>
+      <p>Stay informed at every stage of your application journey. Receive real time notifications, track progress, and get deadline alerts so you never miss an opportunity or important update.</p>
+    </div>
+  </div>
+</div>
+  </section>
+
+
+
+
+
+
+
+
+
+<section id="faq">
+  <h2 class="section-title">
+    <span style="font-family: 'Courier New', Courier, monospace; font-size: 14px;">03 — FAQ</span>
+  </h2>
+  <h1 class="section-sub">Real Questions, Clear Answers</h1>
+  <p class="section-sub" style="margin-top: -40px;">Here’s what students and institutions ask us most often — and how scholarlySPI helps.</p>
+
+  <div class="grid faq-grid">
+    <div class="faq-card">
+      <p class="faq-q">“Is ScholarlySPI free to use?”</p>
+      <p class="faq-a">Yes. Students can explore scholarships, apply, and track their progress without any cost.</p>
+    </div>
+    <div class="faq-card">
+      <p class="faq-q">“Can I apply to multiple scholarships at once?”</p>
+      <p class="faq-a">Absolutely. Upload your documents once and reuse them across multiple applications seamlessly.</p>
+    </div>
+    <div class="faq-card">
+      <p class="faq-q">“How secure is my data?”</p>
+      <p class="faq-a">Your information is encrypted and stored with strict privacy controls. You’re always in control.</p>
+    </div>
+    <div class="faq-card">
+      <p class="faq-q">“Do I need to complete my profile before applying?”</p>
+      <p class="faq-a">We recommend it. A complete profile helps us match you with the most relevant scholarships and improves your chances of success.</p>
+    </div>
+    <div class="faq-card">
+      <p class="faq-q">“Can institutions customize their application forms?”</p>
+      <p class="faq-a">Yes. Institutions can tailor forms, eligibility filters, and review workflows to fit their unique requirements.</p>
+    </div>
+    <div class="faq-card">
+      <p class="faq-q">“What kind of support does ScholarlySPI offer?”</p>
+      <p class="faq-a">We offer call, email support and access to mentors who can guide students through the application process.</p>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+  <section id="institutions">
+  <h2 class="section-title">
+    <span style="font-family: 'Courier New', Courier, monospace; font-size: 14px;">04 - FOR INSTITUTIONS</span>
+  </h2>
+  <h1 class="section-sub">Streamlined scholarship management for schools and foundations.</h1>
+
+  <div class="inst-layout">
+    <div class="inst-img">
+      <img src="{% static 'assets/siate (1) (1).png' %}" alt="Institutions working together">
+    </div>
+<div class="inst-text">
+  <div class="inst-item">
+    <i class="fa-solid fa-users inst-icon"></i>
+    <div>
+      <h3>Efficient Application Review</h3>
+      <p>Manage thousands of applications with automated sorting, filtering, and eligibility checks to save time and reduce manual work.</p>
+    </div>
+  </div>
+
+  <div class="inst-item">
+    <i class="fa-solid fa-database inst-icon"></i>
+    <div>
+      <h3>Centralized Records</h3>
+      <p>All submissions stored securely in one dashboard, reducing paperwork and ensuring easy access for administrators.</p>
+    </div>
+  </div>
+
+  <div class="inst-item">
+    <i class="fa-solid fa-chart-pie inst-icon"></i>
+    <div>
+      <h3>Analytics Insights</h3>
+      <p>Gain valuable insights into demographics, success rates, and funding impact with built in reporting tools.</p>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+
+
+
+
+
+
+<section class="cta-section">
+  <div class="cta-content">
+    <h2 style="font-family: 'stam'; font-size: 4rem;">Start your journey today.</h2>
+    <p>Join SPI students who have applied and secured funding for their education.<br>
+    Free to create profile and explore scholarships.</p>
+
+    <div class="cta-buttons">
+      <a href="{% url 'register' %}" class="cta-btn primary">
+        <i class="fa-solid fa-graduation-cap"></i> Register Now
+      </a>
+      <a href="#" class="cta-btn secondary">Explore Scholarships →</a>
     </div>
 
-    <section class="info-grid" id="apply">
-        <div class="info-card">
-            <h3>Undergraduate</h3>
-            <p>For high school seniors and first-year university students demonstrating exceptional leadership and community service.</p>
-            <ul style="margin-top:10px; padding-left:20px;">
-                <li>Full Tuition Cover</li>
-                <li>Monthly Stipend</li>
-                <li>Laptop Allowance</li>
-            </ul>
-        </div>
+    <p style="font-size: 12px;" class="cta-note">No fees required. Secure your future.</p>
+  </div>
+</section>
 
-        <div class="info-card">
-            <h3>Postgraduate</h3>
-            <p>For Master's and PhD candidates focusing on Research, STEM, and Social Sciences. Open to international applicants.</p>
-            <ul style="margin-top:10px; padding-left:20px;">
-                <li>Research Grants</li>
-                <li>Travel Allowance</li>
-                <li>Mentorship Access</li>
-            </ul>
-        </div>
 
-        <div class="info-card">
-            <h3>Eligibility</h3>
-            <p>Applicants must meet the following core criteria before proceeding to the online application form.</p>
-            <ul style="margin-top:10px; padding-left:20px;">
-                <li>Minimum 3.5 GPA</li>
-                <li>Age 18 - 30</li>
-                <li>Letter of Recommendation</li>
-            </ul>
-        </div>
-    </section>
 
-    <footer>
-        <p>&copy; 2025 Global Education Scholarship Foundation. All Rights Reserved.</p>
-        <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.6;">Designed for the next generation of global leaders.</p>
-    </footer>
 
+
+
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Branding -->
+    <div class="footer-brand">
+      <h2 style="font-family: 'Courier New', Courier, monospace; font-size: 2.5rem; padding: 0; margin: 0; text-align: right;">@scholarlySPI</h2>
+      <p style="padding: 0; margin: 0; text-align: right;">for a bright future.</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="footer-links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-contact">
+      <h3>Contact Us</h3>
+      <p>Email: <a href="mailto:support@scholarlyspi.com"><span style="font-family: 'Courier New', Courier, monospace;">support@scholarlyspi.com</span></a></p>
+      <p style="font-family: 'Courier New', Courier, monospace;">Phone: 6392 345 6789</p>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom">
+    <p>© 2026 scholarlySPI. All rights reserved.</p>
+  </div>
+</footer>
 </body>
 </html>

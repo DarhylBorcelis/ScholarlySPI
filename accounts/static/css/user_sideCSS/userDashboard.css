@@ -1,29 +1,31 @@
 @font-face {
-    font-family: 'regular';
-    src: url('../../fonts/regular.ttf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'regular';
+  src: url('../../fonts/regular.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'FontspringDEMO';
-    src: url('../../fonts/Fontspring-DEMO-tt_commons_pro_regular.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'FontspringDEMO';
+  src: url('../../fonts/Fontspring-DEMO-tt_commons_pro_regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'FontspringDEMO_black';
-    src: url('../../fonts/Fontspring-DEMO-tt_commons_pro_condensed_regular.otf');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'FontspringDEMO_black';
+  src: url('../../fonts/Fontspring-DEMO-tt_commons_pro_condensed_regular.otf');
+  font-weight: normal;
+  font-style: normal;
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'FontspringDEMO_black';
 }
+
 /* * {
   outline: 1px solid red;
 } */
@@ -61,7 +63,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* keep content aligned from top */
+  justify-content: flex-start;
+  /* keep content aligned from top */
 }
 
 .sidebar-box {
@@ -70,11 +73,15 @@ body {
   align-items: center;
   justify-content: center;
 
-  width: 100%;               /* fill sidebar width */
-  flex: 1;                   /* take equal vertical space */
-  margin: 8px 0;             /* small spacing between boxes */
-  
-  background: #0d8a5a;       /* box color */
+  width: 100%;
+  /* fill sidebar width */
+  flex: 1;
+  /* take equal vertical space */
+  margin: 8px 0;
+  /* small spacing between boxes */
+
+  background: #0d8a5a;
+  /* box color */
   border-radius: 10px;
   color: #fff;
   text-align: center;
@@ -90,15 +97,16 @@ body {
   border-radius: 30px;
   min-height: calc(100vh - 80px);
   max-width: 1600px;
-  margin-left: 200px; /* space for sidebar */
+  margin-left: 200px;
+  /* space for sidebar */
   margin-right: auto;
   padding: 30px;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
 
   /* Make sure children grids can stretch */
   display: flex;
   flex-direction: column;
-  
+
 }
 
 
@@ -118,7 +126,7 @@ body {
   object-fit: cover;
   border: 4px solid #0a6847;
   background: #e0e0e0;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
   transition: box-shadow 0.3s, border-color 0.3s, transform 0.2s;
 }
 
@@ -126,34 +134,39 @@ body {
 .parent {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
+  grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
 
   gap: 8px;
 
   /* Fill the .app card */
-  flex: 1;        /* take all available vertical space */
-  width: 100%;    /* full width of .app */
-  height: 100%;   /* full height of .app */
+  flex: 1;
+  /* take all available vertical space */
+  width: 100%;
+  /* full width of .app */
+  height: 100%;
+  /* full height of .app */
 }
 
-    
+
 .div1 {
   grid-column: span 3;
   background-color: #ffffff;
 
   display: grid;
-  grid-template-columns: 4fr 1fr; /* A wider than B */
+  grid-template-columns: 4fr 1fr;
+  /* A wider than B */
   gap: 12px;
   border-radius: 12px;
-  height: 100%; /* fills its grid row */
+  height: 100%;
+  /* fills its grid row */
 }
 
 /* Shared nested blocks */
-.div1 > .nested {
+.div1>.nested {
   background: #ffffff;
   border-radius: 9px;
   display: flex;
-   /* 👈 stretch children vertically */
+  /* 👈 stretch children vertically */
   justify-content: center;
   width: 100%;
   height: 100%;
@@ -169,38 +182,48 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
 
 .text-stack {
   display: grid;
-  grid-template-rows: auto auto; /* headline above subtext */
+  grid-template-rows: auto auto;
+  /* headline above subtext */
 
 }
 
 .profile-layout {
   display: grid;
-  grid-template-columns: 150px 1fr; /* photo left, text right */
+  grid-template-columns: 150px 1fr;
+  /* photo left, text right */
   column-gap: 20px;
-  align-items: stretch;            /* 👈 stretch children to fill row */
+  align-items: stretch;
+  /* 👈 stretch children to fill row */
   width: 100%;
-  height: 100%;                    /* 👈 fill nested-a completely */
+  height: 100%;
+  /* 👈 fill nested-a completely */
 }
 
 .photo-box {
   background: #ffffff;
-  border-radius: 8px;              /* rounded rectangle */
+  border-radius: 8px;
+  /* rounded rectangle */
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
 
-  width: 90%;                     /* fill grid column */
-  height: 90%;                    /* 👈 fill grid row */
-  overflow: hidden;                 /* keep image inside */
+  width: 90%;
+  /* fill grid column */
+  height: 90%;
+  /* 👈 fill grid row */
+  overflow: hidden;
+  /* keep image inside */
 }
 
 .photo-box img {
   aspect-ratio: 1 / 1;
   width: 100%;
   height: 100%;
-  object-fit: cover;   /* fills the box, crops overflow */
-  display: block;      /* removes inline spacing that can add gaps */
+  object-fit: cover;
+  /* fills the box, crops overflow */
+  display: block;
+  /* removes inline spacing that can add gaps */
 }
 
 
@@ -214,7 +237,8 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   align-items: center;
   justify-content: left;
   font-family: 'FontspringDEMO_black';
-  font-size: 35px;   /* large headline */
+  font-size: 35px;
+  /* large headline */
   font-weight: bolder;
   color: #0a6847;
 }
@@ -224,10 +248,13 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   border-radius: 8px;
   display: flex;
   justify-content: left;
-  font-family:'FontspringDEMO_black'; /* lighter font for subtext */
-  font-size: 18px;   /* smaller subtext */
+  font-family: 'FontspringDEMO_black';
+  /* lighter font for subtext */
+  font-size: 18px;
+  /* smaller subtext */
   font-weight: normal;
-  color: #333;       /* softer color */
+  color: #333;
+  /* softer color */
 }
 
 
@@ -237,23 +264,24 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   background-color: #ffffff;
 
   display: grid;
-  grid-template-columns: 1fr 2fr; /* A narrower, B wider */
+  grid-template-columns: 1fr 2fr;
+  /* A narrower, B wider */
   gap: 35px;
 }
 
 /* Shared nested style */
-.div2 > .nested {
+.div2>.nested {
   background: #ffffff;
   border-radius: 6px;
   display: flex;
   align-items: center;
-    gap: 0;
+  gap: 0;
   padding: 0;
   justify-content: left;
 }
 
 /* A styling */
-.div2 > .nested-a {
+.div2>.nested-a {
   font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
   font-size: 35px;
@@ -261,12 +289,15 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   gap: 0;
   padding: 0;
 }
-.text-stack .headline label{
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+.text-stack .headline label {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
 /* B styling */
-.div2 > .nested-b {
-  justify-content: flex-start; /* align search bar to the left */
+.div2>.nested-b {
+  justify-content: flex-start;
+  /* align search bar to the left */
 }
 
 .search-wrapper {
@@ -277,7 +308,8 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
 
 .search-bar {
   width: 100%;
-  padding: 8px 12px 8px 36px; /* extra left padding for icon */
+  padding: 8px 12px 8px 36px;
+  /* extra left padding for icon */
   border: 2px solid #0a6847;
   border-radius: 6px;
   font-size: 17px;
@@ -294,26 +326,34 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   top: 50%;
   left: 10px;
   transform: translateY(-38%);
-  pointer-events: none; /* icon doesn’t block typing */
+  pointer-events: none;
+  /* icon doesn’t block typing */
 }
+
 .div3 {
   grid-column: 1 / span 3;
   grid-row-start: 3;
   background-color: #ffffff;
 
-  display: flex;              /* flex works best for horizontal menus */
+  display: flex;
+  /* flex works best for horizontal menus */
   gap: 6px;
-  overflow-x: auto;           /* enable horizontal scrolling */
-  overflow-y: hidden;         /* prevent vertical scrollbars */
-  scrollbar-width: none;      /* Firefox */
+  overflow-x: auto;
+  /* enable horizontal scrolling */
+  overflow-y: hidden;
+  /* prevent vertical scrollbars */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .div3::-webkit-scrollbar {
-  display: none;              /* Chrome, Safari, Edge */
+  display: none;
+  /* Chrome, Safari, Edge */
 }
 
-.div3 > .menu {
-  flex: 0 0 200px;            /* fixed width per menu item */
+.div3>.menu {
+  flex: 0 0 200px;
+  /* fixed width per menu item */
   background: #fff;
   border-radius: 8px;
   cursor: pointer;
@@ -331,23 +371,28 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   grid-row-start: 4;
   background-color: #ffffff;
 
-  display: flex;              /* stack content inside */
+  display: flex;
+  /* stack content inside */
   align-items: stretch;
   justify-content: stretch;
 
-  overflow: hidden;           /* prevent scrollbars */
+  overflow: hidden;
+  /* prevent scrollbars */
 }
 
 .div4 .box {
   background-color: #f4fffa;
   border-radius: 20px;
-  flex: 1;      
-  gap: 12px;              /* fill available space */
-  display: none;              /* hidden by default */
+  flex: 1;
+  gap: 12px;
+  /* fill available space */
+  display: none;
+  /* hidden by default */
 }
 
 .div4 .box.active {
-  display: flex;              /* only active content shows */
+  display: flex;
+  /* only active content shows */
   align-items: center;
   justify-content: center;
 }
@@ -381,9 +426,12 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   background-color: #ffffff;
 
   display: flex;
-  flex-direction: column;   /* stack boxes vertically */
-  gap: 8px;                /* spacing between boxes */
-    height: auto;       /* constrain to grid cell height */
+  flex-direction: column;
+  /* stack boxes vertically */
+  gap: 8px;
+  /* spacing between boxes */
+  height: auto;
+  /* constrain to grid cell height */
   min-height: 0;
 
 }
@@ -394,7 +442,8 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
 
 
 .div6 .box {
-  flex: 1;                  /* each box takes equal height */
+  flex: 1;
+  /* each box takes equal height */
   background: #f4fffa;
   border-radius: 12px;
 
@@ -419,7 +468,7 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   padding: 15px 12px;
   border-radius: 8px;
   background: linear-gradient(180deg, #f7f9ff, #e4ebff);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   font-family: system-ui, sans-serif;
   font-size: 24px;
   gap: 30px;
@@ -440,15 +489,18 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
 
 /* glow animation */
 @keyframes sun-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.6),
-                0 0 6px 4px rgba(255, 193, 7, 0.4),
-                0 0 12px 6px rgba(255, 193, 7, 0.2);
+      0 0 6px 4px rgba(255, 193, 7, 0.4),
+      0 0 12px 6px rgba(255, 193, 7, 0.2);
   }
+
   50% {
     box-shadow: 0 0 4px 6px rgba(255, 193, 7, 0.9),
-                0 0 12px 10px rgba(255, 193, 7, 0.6),
-                0 0 24px 14px rgba(255, 193, 7, 0.3);
+      0 0 12px 10px rgba(255, 193, 7, 0.6),
+      0 0 24px 14px rgba(255, 193, 7, 0.3);
   }
 }
 
@@ -463,34 +515,45 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
 }
 
 .apply-btn {
-  padding: 12px 24px;              /* bigger size */
+  padding: 12px 24px;
+  /* bigger size */
   border: none;
-  border-radius: 8px;              /* smoother corners */
-  background: #0a6847;             /* your theme green */
+  border-radius: 8px;
+  /* smoother corners */
+  background: #0a6847;
+  /* your theme green */
   color: #fff;
   text-decoration: none;
-  font-size: 16px;                 /* slightly larger text */
-  font-weight: normal;             /* not bold */
+  font-size: 16px;
+  /* slightly larger text */
+  font-weight: normal;
+  /* not bold */
   cursor: pointer;
   transition: background 0.3s, transform 0.2s;
 }
 
 .apply-btn:hover {
-  background: #0d8a5a;             /* lighter green on hover */
-  transform: translateY(-2px);     /* subtle lift */
+  background: #0d8a5a;
+  /* lighter green on hover */
+  transform: translateY(-2px);
+  /* subtle lift */
 }
 
 .apply-btn:active {
-  transform: translateY(0);        /* reset on click */
+  transform: translateY(0);
+  /* reset on click */
 }
 
 #calendar {
   background: #f4fffa;
   border-radius: 12px;
   padding: 20px;
-  width: 100%;        /* take full width of parent */
-  height: 100%;       /* take full height of parent */
-  flex: 1;            /* if inside a flex container, fill available space */
+  width: 100%;
+  /* take full width of parent */
+  height: 100%;
+  /* take full height of parent */
+  flex: 1;
+  /* if inside a flex container, fill available space */
 }
 
 .calendar-header {
@@ -504,9 +567,11 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-auto-rows: 1fr;   /* make rows expand evenly */
+  grid-auto-rows: 1fr;
+  /* make rows expand evenly */
   gap: 6px;
-  height: calc(100% - 40px); /* fill remaining space after header */
+  height: calc(100% - 40px);
+  /* fill remaining space after header */
 }
 
 .day-name {
@@ -524,7 +589,8 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   padding: 8px 0;
   font-size: 12px;
   color: #333;
-  font-family: 'Regular', sans-serif; /* ensure proper font family */
+  font-family: 'Regular', sans-serif;
+  /* ensure proper font family */
 
 }
 
@@ -532,8 +598,10 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   background: transparent;
   border: none;
 }
+
 .calendar-container {
-  flex: 0 0 auto;           /* calendar does not shrink or grow */
+  flex: 0 0 auto;
+  /* calendar does not shrink or grow */
 }
 
 .left-box {
@@ -542,8 +610,10 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   padding: 16px;
   display: flex;
   flex-direction: column;
-  flex: 1;                  /* allow it to grow/shrink with container */
-  min-height: 0;            /* important for flex children with overflow */
+  flex: 1;
+  /* allow it to grow/shrink with container */
+  min-height: 0;
+  /* important for flex children with overflow */
 }
 
 
@@ -557,14 +627,17 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   background-color: #0a6847;
   text-align: center;
   border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+  border-top-right-radius: 20px;
 
 }
 
 .requirements-list {
-  flex: 1;                  /* take remaining space in left-box */
-  overflow-y: hidden;         /* scroll only if content exceeds box height */
-  min-height: 0;            /* prevents flex overflow issues */
+  flex: 1;
+  /* take remaining space in left-box */
+  overflow-y: hidden;
+  /* scroll only if content exceeds box height */
+  min-height: 0;
+  /* prevents flex overflow issues */
 }
 
 
@@ -575,6 +648,7 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   background-color: #0a6847;
   border-radius: 6px;
 }
+
 .requirements-list::-webkit-scrollbar-track {
   background: #f4fffa;
 }
@@ -604,10 +678,14 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   margin-bottom: 12px;
   padding: 0;
 
-  display: flex;              /* enable flexbox */
-  flex-direction: column;     /* stack content vertically */
-  justify-content: flex-end;  /* push content down */
-  align-items: center;        /* keep it centered horizontally */
+  display: flex;
+  /* enable flexbox */
+  flex-direction: column;
+  /* stack content vertically */
+  justify-content: flex-end;
+  /* push content down */
+  align-items: center;
+  /* keep it centered horizontally */
 }
 
 /* Box 1: Menus */
@@ -647,7 +725,7 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
 }
 
 .box3 {
-    display: block;
+  display: block;
   margin: 8px;
   text-decoration: none;
   color: #fff;
@@ -655,10 +733,11 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
   transition: background 0.3s;
 }
 
-.box3 a{
+.box3 a {
   text-decoration: none;
   color: #fff;
 }
+
 .box2 {
   background: #f5f5f5;
   color: #0a6847;
@@ -707,7 +786,9 @@ grid-template-rows: 1fr 0.5fr 0.5fr 1fr 1.5fr;
 }
 
 .box2-image img {
-  width: 95px;          /* adjust size */
+  width: 95px;
+  /* adjust size */
   height: auto;
-  border-radius: 8px;   /* optional rounded corners */
+  border-radius: 8px;
+  /* optional rounded corners */
 }

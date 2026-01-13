@@ -1,104 +1,6 @@
-{% comment %} <h2>Scholarship Renewals</h2>
-
-<table border="1" cellpadding="8">
-  <thead>
-    <tr>
-      <th>Student</th>
-      <th>Semester</th>
-      <th>Linked Scholarship</th>
-      <th>Status</th>
-      <th>Submitted At</th>
-      <th>Documents</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for renewal in renewals %}
-    <tr>
-      <td>{{ renewal.student.username }}</td>
-      <td>{{ renewal.semester }}</td>
-      <td>{{ renewal.scholarship.school_year }} - {{ renewal.scholarship.semester }}</td>
-      <td>{{ renewal.status }}</td>
-      <td>{{ renewal.submitted_at }}</td>
-      <td>
-        {% if renewal.enrollment_cert %}
-          <a href="{{ renewal.enrollment_cert.url }}" target="_blank">Enrollment</a><br>
-        {% endif %}
-        {% if renewal.birth_certificate %}
-          <a href="{{ renewal.birth_certificate.url }}" target="_blank">Birth Cert</a><br>
-        {% endif %}
-        {% if renewal.report_card %}
-          <a href="{{ renewal.report_card.url }}" target="_blank">Report Card</a><br>
-        {% endif %}
-        {% if renewal.good_moral %}
-          <a href="{{ renewal.good_moral.url }}" target="_blank">Good Moral</a><br>
-        {% endif %}
-        {% if renewal.id_photo %}
-          <a href="{{ renewal.id_photo.url }}" target="_blank">ID Photo</a>
-        {% endif %}
-      </td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="6">No renewals found.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-
-<h2>Scholarship Applications</h2>
-
-<table border="1" cellpadding="8">
-  <thead>
-    <tr>
-      <th>Student</th>
-      <th>Semester</th>
-      <th>School Year</th>
-      <th>Strand / Course</th>
-      <th>Status</th>
-      <th>Application Date</th>
-      <th>Documents</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for app in applications %}
-    <tr>
-      <td>{{ app.surname }}, {{ app.firstname }}</td>
-      <td>{{ app.semester }}</td>
-      <td>{{ app.school_year }}</td>
-      <td>{{ app.strand_course }}</td>
-      <td>{{ app.status }}</td>
-      <td>{{ app.application_date }}</td>
-      <td>
-        {% if app.enrollment_certificate %}
-          <a href="{{ app.enrollment_certificate.url }}" target="_blank">Enrollment</a><br>
-        {% endif %}
-        {% if app.birth_certificate %}
-          <a href="{{ app.birth_certificate.url }}" target="_blank">Birth Cert</a><br>
-        {% endif %}
-        {% if app.transcript_records %}
-          <a href="{{ app.transcript_records.url }}" target="_blank">TOR</a><br>
-        {% endif %}
-        {% if app.good_moral %}
-          <a href="{{ app.good_moral.url }}" target="_blank">Good Moral</a><br>
-        {% endif %}
-        {% if app.scholarship_essay %}
-          <a href="{{ app.scholarship_essay.url }}" target="_blank">Essay</a>
-        {% endif %}
-      </td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="7">No scholarship applications found.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table> {% endcomment %}
-
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Layered Dashboard</title>
@@ -107,61 +9,321 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/admin_sideCSS/adminDashboard.css' %}">
 </head>
+
 <body>
 
-<div class="page">
+  <div class="page">
 
-  <!-- BACKGROUND LAYER -->
-  <div class="bg-layer"></div>
+    <!-- BACKGROUND LAYER -->
+    <div class="bg-layer"></div>
 
-  <!-- SIDEBAR -->
-<aside class="sidebar">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-  <!-- Profile picture -->
-  <div class="profile-pic-container">
-    <img src="{% static 'assets/main-logo.png' %}" alt="Student Photo" class="profile-pic" />
-  </div>
+      <!-- Profile picture -->
+      <div class="profile-pic-container">
+        <img src="{% static 'assets/main-logo.png' %}" alt="Student Photo" class="profile-pic" />
+      </div>
 
-  <!-- Box 1: Menus -->
-  <div class="sidebar-box box1">
-    <nav class="box-menu">
-      <ul>
+      <!-- Box 1: Menus -->
+      <div class="sidebar-box box1">
+        <nav class="box-menu">
+          <ul>
           <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
           <li><a href="{% url 'admin_applications' %}">Applications</a></li>
           <li><a href="{% url 'admin_renewals' %}">Renewals</a></li>
           <li><a href="{% url 'admin_user' %}">Users</a></li>
           <li><a href="{% url 'admin_archive' %}">Archive</a></li>
-      </ul>
-    </nav>
-  </div>
+          </ul>
+        </nav>
+      </div>
 
-  <!-- Box 2: Placeholder for future plans -->
-<div class="sidebar-box box2">
-    <div class="box2-image">
-    <img src="{% static 'assets/tele.png' %}" alt="School Logo" />
-  </div>
+      <!-- Box 2: Placeholder for future plans -->
+      <div class="sidebar-box box2">
+        <div class="box2-image">
+          <img src="{% static "assets/tele.png" %}" alt="School Logo" />
+        </div>
 
-  <h4>Have Questions?</h4>
-  <ul class="assistance-info">
-    <li><i class="fas fa-globe"></i> <a href="https://www.schoolwebsite.edu" target="_blank">spi.edu.ph</a></li>
-    <li><i class="fas fa-phone"></i>  02 12365678</li>
-    <li><i class="fas fa-mobile-alt"></i> 63 912 355 6789</li>
-  </ul>
-</div>
+        <h4>Have Questions?</h4>
+        <ul class="assistance-info">
+          <li><i class="fas fa-globe"></i> <a href="https://www.schoolwebsite.edu" target="_blank">spi.edu.ph</a></li>
+          <li><i class="fas fa-phone"></i> 02 12365678</li>
+          <li><i class="fas fa-mobile-alt"></i> 63 912 355 6789</li>
+        </ul>
+      </div>
 
-<div class="box3">
-  <ul class="logout-menu">
-    <a href="{% url 'logout' %}">Logout</a>
-  </ul>
-</div>
+      <div class="box3">
+        <ul class="logout-menu">
+          <a href="{%  url "logout" %}">Logout</a>
+        </ul>
+      </div>
 
-</aside>
+    </aside>
 
-  <!-- MAIN FLOATING CONTENT -->
-<div class="app">
-  
-</div>
+    <!-- MAIN FLOATING CONTENT -->
+    <div class="app">
+
+      <div class="parent">
+        <!-- div1: Logo -->
+        <div class="div1">
+          <h2 style="color: #0a6847; font-family: 'Courier New', Courier, monospace, Helvetica, sans-serif;"
+            class="logo">scholarlySPI</h2>
+        </div>
+
+        <!-- div2: Search + Profile -->
+        <div class="div2">
+          <!-- Search on the left -->
+          <div class="search-wrapper">
+            <span class="search-icon">
+              <!-- magnifying glass SVG -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#0a6847" viewBox="0 0 24 24">
+                <path
+                  d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
+              </svg>
+            </span>
+            <input type="text" placeholder="Search..." class="search-bar">
+          </div>
+          <!-- Profile on the right -->
+          <div class="profile">
+            <img src="{% static 'assets/main-logo.png' %}" alt="Admin Profile" />
+          </div>
+        </div>
+        <!-- other divs -->
+        <!-- div3: Applications Overview -->
+        <!-- div3: Applications Overview -->
+
+
+
+
+        <div class="div3 widget">
+          <h3 class="widget-title">Applications Overview</h3>
+          <h4 class="widget-subtitle">Summary of current application statuses</h4>
+
+          <div class="metrics">
+            <div class="metric">
+              <span class="badge accepted">Approved</span>
+              <br><br><br><br><span>{{ approved_count }}</span>
+            </div>
+
+            <div class="metric">
+              <span class="badge pending">Pending</span>
+              <br><span>{{ pending_count }}</span>
+            </div>
+
+            <div class="metric">
+              <span class="badge rejected">Rejected</span>
+              <br><span>{{ rejected_count }}</span>
+            </div>
+
+            <div class="metric">
+              <span class="badge total">Total</span>
+              <br><span>{{ total_count }}</span>
+            </div>
+          </div>
+
+
+          <!-- Button aligned right -->
+          <div class="actions">
+              <a href="{% url 'admin_applications' %}" class="app-btn">
+                Go to Applications
+                <span class="arrow-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M1 8h12M9 4l4 4-4 4" />
+                  </svg>
+                </span>
+              </a>
+          </div>
+        </div>
+
+
+
+
+
+
+
+        <!-- div4: Scholarship Funds -->
+        <div class="div4 widget">
+          <h3 class="widget-title">Scholarship Funds</h3>
+          <h4 class="widget-subtitle">Budget allocation and remaining funds</h4>
+          <div class="funds">
+            <div class="fund-row">
+              <span class="icon">
+                <!-- Money bag icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path
+                    d="M4 2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1H4V2zm0 2h8v2H4V4zm0 3h8v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z" />
+                </svg>
+              </span>
+              <span>Total Budget:</span>
+              <span>₱500,000</span>
+            </div>
+            <div class="fund-row">
+              <span class="icon">
+                <!-- Chart icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M0 0h1v15h15v1H0V0zm3 13h2V6H3v7zm4 0h2V2H7v11zm4 0h2V9h-2v4z" />
+                </svg>
+              </span>
+              <span>Allocated:</span>
+              <span>₱350,000</span>
+            </div>
+            <div class="fund-row">
+              <span class="icon">
+                <!-- Down arrow icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 12l-6-6h12l-6 6z" />
+                </svg>
+              </span>
+              <span>Remaining:</span>
+              <span>₱150,000</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="div5 widget">
+          <div id="calendar"></div>
+        </div>
+
+
+        <div class="div7 widget">
+          <h3 class="widget-title">Recent Users</h3>
+
+          <div class="recent-row">
+            {% for app in recent_applications %}
+              <div class="recent-item">
+                {% if app.student.studentprofile.profile_image %}
+                  <img src="{{ app.student.studentprofile.profile_image.url }}" class="avatar">
+                {% else %}
+                  <img src="{% static 'images/default-avatar.png' %}" class="avatar">
+                {% endif %}
+
+                <div class="info">
+                  <span class="name">
+                    {{ app.firstname }} {{ app.surname }}
+                  </span>
+                  <span class="date">
+                    Requested: {{ app.application_date|date:"M d, Y" }}
+                  </span>
+                </div>
+              </div>
+            {% empty %}
+              <p style="opacity:0.6;">No recent applications</p>
+            {% endfor %}
+          </div>
+        </div>
+
+
+        <style>
+          .badge {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+          }
+
+          .pending {
+            background: #ffeeba;
+            color: #856404;
+          }
+
+          .approved {
+            background: #d4edda;
+            color: #155724;
+          }
+
+          .rejected {
+            background: #f8d7da;
+            color: #721c24;
+          }
+
+        </style>
+
+
+
+        <div class="div8 widget">
+          <table class="transaction-table" style="font-size: 20px ">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Semester</th>
+                <th>Date</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in recent_applications %}
+                <tr>
+                  <td>{{ app.firstname }} {{ app.surname }}</td>
+
+                  <td>
+                    <span class="badge 
+                      {% if app.status == 'Approved' %}approved
+                      {% elif app.status == 'Rejected' %}rejected
+                      {% else %}pending{% endif %}">
+                      {{ app.status }}
+                    </span>
+                  </td>
+                  <td>{{ app.semester }}</td>
+
+                  <td>{{ app.application_date|date:"M d, Y" }}</td>
+
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="4" style="text-align:center;">No applications found.</td>
+                </tr>
+                
+              {% endfor %}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+
+
+      <script>
+        function renderCalendar(deadlines = [20, 25]) {
+          const calendar = document.getElementById("calendar");
+          const now = new Date();
+          const month = now.toLocaleString("default", { month: "long" });
+          const year = now.getFullYear();
+
+          let html = `
+      <div class="calendar-header">
+        <span class="month">${month} ${year}</span>
+      </div>
+      <div class="calendar-grid">
+        <div class="day">Sun</div>
+        <div class="day">Mon</div>
+        <div class="day">Tue</div>
+        <div class="day">Wed</div>
+        <div class="day">Thu</div>
+        <div class="day">Fri</div>
+        <div class="day">Sat</div>
+    `;
+
+          const firstDay = new Date(year, now.getMonth(), 1).getDay();
+          const daysInMonth = new Date(year, now.getMonth() + 1, 0).getDate();
+
+          for (let i = 0; i < firstDay; i++) {
+            html += `<div class="date"></div>`;
+          }
+
+          for (let d = 1; d <= daysInMonth; d++) {
+            const isDeadline = deadlines.includes(d);
+            html += `<div class="date ${isDeadline ? "deadline" : ""}">${d}</div>`;
+          }
+
+          html += `</div>`;
+          calendar.innerHTML = html;
+        }
+
+        renderCalendar([20, 25]); // Example deadlines
+      </script>
+    </div>
 
 
 </body>
+
 </html>

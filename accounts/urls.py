@@ -5,7 +5,6 @@ urlpatterns = [
 
     path('', views.index, name='index'),
 
-
     # Dashboard
     path('student_dashboard/', views.student_dashboard, name='student_dashboard'),
     path('teacher_dashboard/', views.teacher_dashboard, name='teacher_dashboard'),
@@ -25,11 +24,8 @@ urlpatterns = [
     path('admin_renewals/<int:renewal_id>/accept/', views.accept_renewal, name='accept_renewal'),
     path('admin_renewals/<int:renewal_id>/reject/', views.reject_renewal, name='reject_renewal'),
 
-
     # Admin User Actions
     path('admin/user/<int:user_id>/ban/', views.ban_user, name='ban_user'),
-
-
 
     # Settings
     path('student/settings/', views.student_settings, name='student_settings'),

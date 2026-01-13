@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
 
 from django.contrib.auth.models import User
-from .models import StudentProfile, ScholarshipApplication,Renewal
+from .models import StudentProfile, ScholarshipApplication,Renewal,Notification
 
 
 # HOME PAGE
@@ -30,14 +30,20 @@ def student_dashboard(request):
     renewals = Renewal.objects.filter(student=request.user)
     profile = request.user.studentprofile
     has_approved = applications.filter(status='Approved').exists()
+    has_pending = applications.filter(status='Pending').exists()
     renewal_pending = renewals.filter(status='Pending').exists()
+    notifications = Notification.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
 
     return render(request, 'student/dashboard.html', {
         'applications': applications,
         'renewals': renewals,
         'has_approved': has_approved,
         'renewal_pending': renewal_pending,
-        'profile': profile
+        'profile': profile,
+        'is_pending': has_pending,
+        'notifications':notifications,
     })
 @user_passes_test(is_teacher)
 def teacher_dashboard(request):
@@ -63,38 +69,27 @@ def teacher_dashboard(request):
     })
 @user_passes_test(is_admin)
 def admin_dashboard(request):
-    if request.method == 'POST':
-        action = request.POST.get('action')
-
-        # allowed statuses (important for safety)
-        if action not in ['Approved', 'Rejected', 'Pending']:
-            return redirect('admin_dashboard')
-
-        # Scholarship Application update
-        app_id = request.POST.get('app_id')
-        if app_id:
-            application = get_object_or_404(ScholarshipApplication, id=app_id)
-            application.status = action
-            application.save()
-
-        # Renewal update
-        renewal_id = request.POST.get('renewal_id')
-        if renewal_id:
-            renewal = get_object_or_404(Renewal, id=renewal_id)
-            renewal.status = action
-            renewal.save()
-
-        return redirect('admin_dashboard')
 
     # GET request
+    recent_applications = ScholarshipApplication.objects.select_related('student').order_by('-application_date')[:3]
     applications = ScholarshipApplication.objects.all().order_by('-submitted_at')
     renewals = Renewal.objects.all().order_by('-submitted_at')
+
+
+    approved_count = ScholarshipApplication.objects.filter(status='Approved').count()
+    pending_count = ScholarshipApplication.objects.filter(status='Pending').count()
+    rejected_count = ScholarshipApplication.objects.filter(status='Rejected').count()
+    total_count = ScholarshipApplication.objects.count()
 
     return render(request, 'admin/dashboard.html', {
         'applications': applications,
         'renewals': renewals,
+        'recent_applications': recent_applications,
+        'approved_count': approved_count,
+        'pending_count': pending_count,
+        'rejected_count': rejected_count,
+        'total_count': total_count,
     })
-
 
 # Admin: View Users
 @user_passes_test(is_admin)
@@ -133,14 +128,21 @@ def accept_application(request, app_id):
     app = get_object_or_404(ScholarshipApplication, id=app_id)
     app.status = 'Approved'
     app.save()
-    messages.success(request, f"Application for {app.firstname} {app.surname} approved.")
+    Notification.objects.create(
+        user=app.student,
+        message="Your scholarship application has been Approved."
+    )
     return redirect('admin_applications')
+
 @user_passes_test(is_admin)
 def reject_application(request, app_id):
     app = get_object_or_404(ScholarshipApplication, id=app_id)
     app.status = 'Rejected'
     app.save()
-    messages.success(request, f"Application for {app.firstname} {app.surname} rejected.")
+    Notification.objects.create(
+        user=app.student,
+        message="Your scholarship application has been Rejected."
+    )
     return redirect('admin_applications')
 
 #CRUD FOR ADMIN RENEWALS - ACCEPT/REJECT
@@ -149,14 +151,20 @@ def accept_renewal(request, renewal_id):
     renew = get_object_or_404(Renewal, id=renewal_id)
     renew.status = 'Approved'
     renew.save()
-    messages.success(request, f"Renewal for {renew.student.username} approved.")
+    Notification.objects.create(
+        user=renew.student,
+        message="Your scholarship renewal has been Approved."
+    )
     return redirect('admin_renewals')
 @user_passes_test(is_admin)
 def reject_renewal(request, renewal_id):
     renew = get_object_or_404(Renewal, id=renewal_id)
     renew.status = 'Rejected'
     renew.save()
-    messages.success(request, f"Renewal for {renew.student.username} rejected.")
+    Notification.objects.create(
+        user=renew.student,
+        message="Your scholarship renewal has been Rejected."
+    )
     return redirect('admin_renewals')
 
 # Admin: Ban User
@@ -193,7 +201,12 @@ def student_settings(request):
 
             user.set_password(new_password)
             user.save()
-            messages.success(request, 'Password changed successfully. Please log in again.')
+
+            Notification.objects.create(
+                user=request.user,
+                message="You have successfully changed your password."
+            )
+            
             return redirect('login')
 
         else:
@@ -208,7 +221,10 @@ def student_settings(request):
             profile.user.save()
             profile.save()
 
-            messages.success(request, 'Profile updated successfully.')
+            Notification.objects.create(
+                user=request.user,
+                message="Your profile has been updated successfully."
+            )
             return redirect('student_settings')
 
     return render(request, 'student/settings.html', {
@@ -338,6 +354,11 @@ def apply_scholarship(request):
             scholarship_essay=scholarship_essay
         )
 
+        Notification.objects.create(
+            user=request.user,
+            message=f"Your scholarship application submitted on {application_date} has been received."
+        )
+
         return redirect('student_dashboard')
     profile = request.user.studentprofile
     return render(request, 'accounts/apply.html', {'profile': profile})
@@ -363,7 +384,10 @@ def apply_renewal(request):
             id_photo=request.FILES.get('id_photo'),
         )
 
-        messages.success(request, "Renewal submitted successfully.")
+        Notification.objects.create(
+            user=request.user,
+            message=f"Your scholarship renewal submit has been received."
+        )
         return redirect('student_dashboard')
     profile = request.user.studentprofile
 
@@ -429,10 +453,12 @@ def user_documents(request):
     profile = getattr(request.user, 'studentprofile', None)
 
     applications = ScholarshipApplication.objects.all().order_by('-submitted_at')
+    app = ScholarshipApplication.objects.filter(student=request.user).order_by('-submitted_at').first()
 
     return render(request, 'student/documents.html', {
         'profile': profile,
         'applications': applications,
+        'app':app,
     })
 
 
